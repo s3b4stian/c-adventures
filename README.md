@@ -1,2 +1,2 @@
-# c-adventures
-A collection of snippets of c programming
+# C Adventures
+A little collection of milestones of my learning path of c programming language.
