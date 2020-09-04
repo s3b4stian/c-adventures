@@ -47,6 +47,15 @@ int main () {
     // const char *name3 = "SebaPointer\0";
     char *name3 = "SebaPointer\0";
 
+    // this work
+    name3 = "SebaPointerReAssignated\0";
+    printf("%s: %x\n", name3, &name3);
+    
+    // this not work, try to modify read only memory
+    //*(name3+0) = 's';
+    //name3[0] = 's';
+
+
     // fifth method
     // poiter to a string
     // string stored in heap
@@ -55,7 +64,16 @@ int main () {
     strcpy(name4, "SebaPointerToHeap");
     // or 
     memcpy(name4, "SebaPointerToHeap", 18);
+    // this not work
+    //name4 = "SebaPointerToHeap\0";
 
+    printf("%s: %x\n", name4, &name4);
+
+    // valid
+    name4[0] = 's';
+    name4[4] = 'p';
+    name4[11] = 't';
+    name4[13] = 'h';
 
     printf("%s\n", name);
     printf("%s\n", name1);
