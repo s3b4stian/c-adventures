@@ -5,19 +5,10 @@
 struct person {
     unsigned char *name;
     unsigned char *surname;
-    void (*construct)(struct person *, char *, char *);
+
     void (*get)(struct person *);
     void (*sayHello)(struct person *);
 };
-
-void construct(struct person *this, char *name, char *surname)
-{
-    this->name = calloc(strlen(name) + 8, sizeof(unsigned char));
-    this->surname = calloc(strlen(surname) + 8, sizeof(unsigned char));
-    
-    strcpy(this->name, name);
-    strcpy(this->surname, surname);
-}
 
 void getPerson(struct person *this)
 {
@@ -29,19 +20,33 @@ void sayHello(struct person *this)
     printf("%s %s say Hello Word\n", this->name, this->surname);
 }
 
-struct person *createInstanceOfPerson(char *name, char *surname)
+void person_get(struct person *this)
+{
+    printf("functional: %s %s\n", this->name, this->surname);
+}
+
+void person_say_hello(struct person *this)
+{
+    printf("functional: %s %s say Hello Word\n", this->name, this->surname);
+}
+
+struct person *person_init(char *name, char *surname)
 {
     struct person *this = calloc(1, sizeof(struct person));
-    this->construct = &construct;
+    //pointers to function
     this->get = &getPerson;
     this->sayHello = &sayHello;
+    //struct properties
+    this->name = calloc(strlen(name) + 8, sizeof(unsigned char));
+    this->surname = calloc(strlen(surname) + 8, sizeof(unsigned char));
     
-    this->construct(this, name, surname);
+    strcpy(this->name, name);
+    strcpy(this->surname, surname);
     
     return this;
 }
 
-void destroyInstanceOfPerson(struct person *this)
+void person_destroy(struct person *this)
 {
     free(this->name);
     free(this->surname);
@@ -51,19 +56,26 @@ void destroyInstanceOfPerson(struct person *this)
 
 int main()
 {
-    struct person *me = createInstanceOfPerson("Sebastian", "Rapetti");
+    struct person *me = person_init("Sebastian", "Rapetti");
     
+    person_get(me);
+    person_say_hello(me);
+
     me->get(me);
     me->sayHello(me);
     
-    destroyInstanceOfPerson(me);
+    person_destroy(me);
     
-    struct person *another = createInstanceOfPerson("Another", "Persona");
+
+    struct person *another = person_init("Another", "Person");
     
+    person_get(another);
+    person_say_hello(another);
+
     another->get(another);
     another->sayHello(another);
     
-    destroyInstanceOfPerson(another);
+    person_destroy(another);
     
     return 0;
 }
