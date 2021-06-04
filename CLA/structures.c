@@ -58,10 +58,12 @@ int main () {
 
     //printing structures 
     printf("name: %s\n", he.name);
+    printf("year: %d\n", he.last_visit.year);
     printf("name: %s\n", she.name);
 
     //printing pointer to structure
     printf("name: %s\n", other->name);
+    printf("year: %d\n", other->last_visit.year);
     //printing pointer to structure using dereferencing
     printf("name: %s\n", (*other).name);
 
