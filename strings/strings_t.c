@@ -13,6 +13,7 @@ string_t string_init(char string[])
     };
 }
 
+
 string_t string_concat(char _string[], string_t first, string_t second)
 {
     //get total len without null bytes
@@ -33,6 +34,7 @@ string_t string_concat(char _string[], string_t first, string_t second)
     };
 }
 
+
 string_t string_copy(char _string[], string_t first)
 {
     //copy string to buffer
@@ -45,12 +47,13 @@ string_t string_copy(char _string[], string_t first)
     };
 }
 
+
 string_t string_trim_left(char _string[], string_t first, char chars[])
 {
     int chars_len = 0;
     int skipp = 0;
 
-    //check for chars to trim lenght
+    //check for chars to trim length
     for (; chars[chars_len] != '\0'; chars_len++);
 
     for (int i = 0; i < first.len;) {
@@ -61,7 +64,7 @@ string_t string_trim_left(char _string[], string_t first, char chars[])
                 break;
             }
         }
-        //exit condition, if skipp different
+        //exit condition, if skipp differs
         //from i then there where nothing to skipp
         //increment i before because skipp if always i + 1 
         //when char is found
@@ -77,4 +80,46 @@ string_t string_trim_left(char _string[], string_t first, char chars[])
         .len_null = first.len - skipp + 1,
         .string = _string
     };
+}
+
+
+string_t string_trim_right(char _string[], string_t first, char chars[])
+{
+    int chars_len = 0;
+    int skipp = 0;
+
+    //check for chars to trim length
+    for (; chars[chars_len] != '\0'; chars_len++);
+
+    for (int i = first.len - 1; i >= 0;) {
+        //check for chars to skipp
+        for (int j = 0; j < chars_len; j++){
+            if (first.string[i] == chars[j]) {
+                skipp++;
+                break;
+            }
+        }
+        //exit condition
+        if ((first.len - 1) - --i != skipp) {
+            break;
+        }
+    }
+
+    int final_len = first.len - skipp;
+    for (int i = 0; i < (final_len + 1); _string[i++] = first.string[i]);
+
+    //set null byte at the end of the string
+    _string[final_len] = '\0';
+
+    return (string_t) {
+        .len = final_len,
+        .len_null = final_len + 1,
+        .string = _string
+    };
+}
+
+
+void string_zero(string_t first)
+{
+    for (int i = 0; i <= first.len; first.string[i++] = '\0');
 }
