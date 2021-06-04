@@ -40,5 +40,5 @@ int main(void) {
     SNAP(counter);
     SNAP(SheepTotal);
 
-    GLUE(this is a, concatenated string);
+    GLUE(this is a, concatenated stuff);
 }
