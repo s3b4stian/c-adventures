@@ -1,10 +1,19 @@
 #include <stdio.h>
-
 #include "strings_t.h"
 
 //compile: gcc test.c strings_t.c
 int main(void)
 {
+    //string_t *ps1 = calloc(sizeof(string_t),1);
+    //ps1->len = 5;
+    //ps1->len_null = 6;
+    //ps1->string = calloc(6,1);
+    //strcpy(ps1->string, "Hello");
+    //printf("string_init ps1[%d][%d] [%s]\n", ps1->len, ps1->len_null, ps1->string);
+    //free(ps1->string);
+    //free(ps1);
+    //ps1 = 0;
+
     string_t s1 = string_init("Hello ");
     printf("string_init s1[%d][%d] [%s]\n", s1.len, s1.len_null, s1.string);
 
@@ -44,6 +53,15 @@ int main(void)
     //string_zero(s7);
     STRING_ZERO(s7);
     printf("string_zero s7[%d][%d] [%s]\n", s7.len, s7.len_null, s7.string);
+
+
+    string_t s9 = string_init("abcdef");
+    printf("string_init s9[%d][%d] [%s]\n", s9.len, s9.len_null, s9.string);
+    //macro expand to
+    //char s8_buffer[s4.len_null];
+    //string_t s8 = string_substring(s8_buffer, s9, 2, 2);
+    STRING_SUBSTRING(s8, s9, 2, 2);
+    printf("string_substring(s9, 2, 2) s8[%d][%d] [%s]\n", s8.len, s8.len_null, s8.string);
 
     return 0;
 }

@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "strings_t.h"
 
 string_t string_init(char string[])
@@ -20,9 +21,9 @@ string_t string_concat(char _string[], string_t first, string_t second)
     int total_len = first.len + second.len;
     
     //copy first string
-    for (int i = 0; i <= first.len; _string[i++] = first.string[i]); 
+    for (int i = 0; i < first.len; _string[i] = first.string[i], i++); 
     //copy second string
-    for (int i = 0; i < total_len; _string[first.len + i++] = second.string[i]);
+    for (int i = 0; i < total_len; _string[first.len + i] = second.string[i], i++);
     
     //set null byte at the end of the string
     _string[total_len] = '\0';
@@ -38,7 +39,7 @@ string_t string_concat(char _string[], string_t first, string_t second)
 string_t string_copy(char _string[], string_t first)
 {
     //copy string to buffer
-    for (int i = 0; i <= first.len; _string[i++] = first.string[i]);
+    for (int i = 0; i <= first.len; _string[i] = first.string[i], i++);
 
     return (string_t) {
         .len = first.len,
@@ -73,7 +74,7 @@ string_t string_trim_left(char _string[], string_t first, char chars[])
         }
     }
 
-    for (int i = 0; i <= (first.len - skipp); _string[i++] = first.string[skipp + i]);
+    for (int i = 0; i <= (first.len - skipp); _string[i] = first.string[skipp + i], i++);
 
     return (string_t) {
         .len = first.len - skipp,
@@ -106,9 +107,49 @@ string_t string_trim_right(char _string[], string_t first, char chars[])
     }
 
     int final_len = first.len - skipp;
-    for (int i = 0; i < (final_len + 1); _string[i++] = first.string[i]);
+    for (int i = 0; i < (final_len + 1); _string[i] = first.string[i], i++);
 
     //set null byte at the end of the string
+    _string[final_len] = '\0';
+
+    return (string_t) {
+        .len = final_len,
+        .len_null = final_len + 1,
+        .string = _string
+    };
+}
+
+
+string_t string_substring(char _string[], string_t first, int from, int to)
+{
+    int _from = from;
+    int _to = to;
+
+    //check for negative offsets
+    //as start to the end of the string
+    //if negative number i grather than string length
+    //from start to zero
+    if (from < 0) {
+        _from = first.len + from;
+        if (_from < 0) {
+            _from = 0;
+        }
+    }
+
+    //if from greater than string len, point to last char of the string
+    if (from > first.len) {
+        _from = first.len -1;
+    }
+
+    _to = _from + _to;
+    if (_to > first.len) {
+        _to = first.len;
+    }
+
+    //printf("[%d][%d]\n", _from, _to);
+    int final_len = _to - _from;
+    for (int i = 0; i < _to - _from; _string[i] = first.string[i + _from], i++);
+
     _string[final_len] = '\0';
 
     return (string_t) {

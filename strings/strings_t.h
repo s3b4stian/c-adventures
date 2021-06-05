@@ -13,14 +13,19 @@
     string_t S3 = string_concat(S3##_buffer, S1, S2) \
 
 //trim left string S1 considering chars in S2 and put result in S3
-#define STRING_TRIM_LEFT(S3, S1, S2)                     \
-    char S3##_buffer1[S1.len_null];                      \
-    string_t S3 = string_trim_left(S3##_buffer1, S1, S2) \
+#define STRING_TRIM_LEFT(S3, S1, S2)                    \
+    char S3##_buffer[S1.len_null];                      \
+    string_t S3 = string_trim_left(S3##_buffer, S1, S2) \
 
 //trim right string S1 considering chars in S2 and put result in S3
-#define STRING_TRIM_RIGHT(S3, S1, S2)                     \
-    char S3##_buffer1[S1.len_null];                       \
-    string_t S3 = string_trim_right(S3##_buffer1, S1, S2) \
+#define STRING_TRIM_RIGHT(S3, S1, S2)                    \
+    char S3##_buffer[S1.len_null];                       \
+    string_t S3 = string_trim_right(S3##_buffer, S1, S2) \
+
+//creat a substring from S1 from S to E position and put result in S3
+#define STRING_SUBSTRING(S3, S1, S, E)                    \
+    char S3##_buffer[S1.len_null];                        \
+    string_t S3 = string_substring(S3##_buffer, S1, S, E) \
 
 //fill S1 string with null chars
 #define STRING_ZERO(S1) \
@@ -52,6 +57,9 @@ string_t string_trim_left(char _string[], string_t first, char chars[]);
 
 
 string_t string_trim_right(char _string[], string_t first, char chars[]);
+
+
+string_t string_substring(char _string[], string_t first, int from, int to);
 
 
 void string_zero(string_t first);
