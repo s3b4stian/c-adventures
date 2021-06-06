@@ -1,53 +1,115 @@
-#include <stdio.h>
+#include <stdlib.h>
 #include "strings_t.h"
 
-string_t string_init(char string[])
+
+string_t* string_init_c(string_t* _string, char string[])
+{
+    if (_string) {
+    
+        int len = 0;
+        //check for string lenght
+        for (; string[len] != '\0'; len++);
+
+        //assign struct
+        *_string = (string_t) {
+            .len = len,
+            .len_null = len + 1,
+            .string = malloc(len + 1)
+        };
+
+        //check for malloc
+        if (!_string->string) {
+            _string->len = 0;
+            _string->len_null = 0;
+            return _string;
+        }
+
+        //copy string
+        for (int i = 0; i < len; _string->string[i] = string[i], i++); 
+
+        //set nullbyte to the end of the string
+        _string->string[len] = '\0';
+    }
+    else {
+        *_string = (string_t) {0};
+    }
+
+    return _string;
+}
+
+
+static int string_concat_internal(string_t* first, char* second, size_t total_len)
+{
+    //realloc memory
+    //make it safe
+    char* p_tmp = realloc(first->string, total_len + 1);
+    
+    //check if realloc fail, if yes
+    //original pointer is preserved
+    if (p_tmp) {
+        //assign the new poinetr to string
+        first->string = p_tmp;
+
+        //copy second string
+        //verify this cicle to avoid overflow with second variable
+        for (int i = 0; (first->len + i) < (total_len - 1); first->string[first->len + i] = second[i], i++);
+        
+        //set new len
+        first->len = total_len - 1;
+        first->len_null = total_len;
+        //set null byte at the end of the string
+        first->string[total_len - 1] = '\0';
+
+        return total_len;
+    }
+
+    return -1;
+}
+
+
+int string_concat_c(string_t* first, char* second)
 {
     int len = 0;
     //check for string lenght
-    for (; string[len] != '\0'; len++);
-
-    return (string_t) {
-        .len = len,
-        .len_null = len + 1,
-        .string = string
-    };
-}
-
-
-string_t string_concat(char _string[], string_t first, string_t second)
-{
-    //get total len without null bytes
-    int total_len = first.len + second.len;
+    for (; second[len] != '\0'; len++);
     
-    //copy first string
-    for (int i = 0; i < first.len; _string[i] = first.string[i], i++); 
-    //copy second string
-    for (int i = 0; i < total_len; _string[first.len + i] = second.string[i], i++);
+    //get total len with only last null bytes
+    int total_len = first->len + len + 1;
     
-    //set null byte at the end of the string
-    _string[total_len] = '\0';
-
-    return (string_t) {
-        .len = total_len,
-        .len_null = total_len + 1,
-        .string = _string
-    };
+    return string_concat_internal(first, second, total_len);
 }
 
 
-string_t string_copy(char _string[], string_t first)
+int string_concat_st(string_t* first, string_t* second)
 {
-    //copy string to buffer
-    for (int i = 0; i <= first.len; _string[i] = first.string[i], i++);
-
-    return (string_t) {
-        .len = first.len,
-        .len_null = first.len + 1,
-        .string = _string
-    };
+    //get total len with only last null bytes
+    int total_len = first->len + second->len_null;
+    
+    return string_concat_internal(first, second->string, total_len);
 }
 
+
+string_t* string_concat_to_new(string_t* first, string_t* second)
+{
+    //get total len with only last null bytes
+    int total_len = first->len + second->len_null;
+
+    //initialize the new string with the content of first string
+    string_t* _string = string_init_c(malloc(sizeof(string_t)), first->string);
+
+    //do concatenation, if fails return 0 string
+    if (string_concat_internal(_string, second->string, total_len) == -1){
+        *_string = (string_t) {0};
+    }
+
+    return _string;
+}
+
+string_t* string_copy(string_t *first)
+{
+    return string_init_c(malloc(sizeof(string_t)), first->string);
+}
+/*
 
 string_t string_trim_left(char _string[], string_t first, char chars[])
 {
@@ -158,9 +220,14 @@ string_t string_substring(char _string[], string_t first, int from, int to)
         .string = _string
     };
 }
+*/
 
-
-void string_zero(string_t first)
+void string_delete(string_t* _string)
 {
-    for (int i = 0; i <= first.len; first.string[i++] = '\0');
+    if (_string) {
+        _string->len = 0;
+        _string->len_null = 0;
+        free(_string->string);
+        free(_string);
+    }
 }
