@@ -42,7 +42,7 @@ static int string_concat_internal(string_t* first, char* second, size_t total_le
 {
     //realloc memory
     //make it safe
-    char* p_tmp = realloc(first->string, total_len + 1);
+    char* p_tmp = realloc(first->string, total_len);
     
     //check if realloc fail, if yes
     //original pointer is preserved
