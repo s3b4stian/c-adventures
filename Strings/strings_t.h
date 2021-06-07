@@ -58,26 +58,35 @@ typedef struct {
 //first argument is the result of malloc(sizeof(string_t)) 
 string_t* string_init_c(string_t* _string, char string[]);
 
+
 //concat to new string
 string_t* string_concat_to_new(string_t* first, string_t* second);
+
 
 //cancat to first string
 int string_concat_c(string_t* first, char* second);
 int string_concat_st(string_t* first, string_t* second);
 
+
 //string copy
 string_t* string_copy(string_t* first);
 
 
-//string_t string_trim_left(char _string[], string_t first, char chars[]);
+//trim a string, left side
+int string_trim_left(string_t* first, char chars[]);
+string_t* string_trim_left_to_new(string_t* first, char chars[]);
 
 
-//string_t string_trim_right(char _string[], string_t first, char chars[]);
+//trim a string, right side
+int string_trim_right(string_t* first, char chars[]);
+string_t* string_trim_right_to_new(string_t* first, char chars[]);
 
 
-//string_t string_substring(char _string[], string_t first, int from, int to);
+//substring of a string
+string_t* string_substring(string_t* first, int from, int to);
 
 
+//delete a string, free memory
 void string_delete(string_t* _string);
 
 #endif

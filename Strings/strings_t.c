@@ -105,13 +105,83 @@ string_t* string_concat_to_new(string_t* first, string_t* second)
     return _string;
 }
 
+
 string_t* string_copy(string_t *first)
 {
     return string_init_c(malloc(sizeof(string_t)), first->string);
 }
-/*
 
-string_t string_trim_left(char _string[], string_t first, char chars[])
+
+int string_trim_left(string_t* first, char chars[])
+{
+    int chars_len = 0;
+    int trim = 0;
+
+    //check for chars to trim length
+    for (; chars[chars_len] != '\0'; chars_len++);
+
+    for (int i = 0; i < first->len;) {
+        //check for chars to trim
+        for (int j = 0; j < chars_len; j++){
+            if (first->string[i] == chars[j]) {
+                trim++;
+                break;
+            }
+        }
+        //exit condition, if trim differs
+        //from i then there where nothing to skipp
+        //increment i before because skipp if always i + 1 
+        //when char is found
+        if (++i != trim) {
+            break;
+        }
+    }
+
+    //set new length
+    first->len -= trim;
+    first->len_null -= trim;
+    
+    //shift the string
+    for (int i = 0; i < first->len; first->string[i] = first->string[trim + i], i++);
+
+    //set new length and null byte
+    first->string[first->len] = '\0';
+
+    return trim;
+}
+
+
+int string_trim_right(string_t* first, char chars[])
+{
+    int chars_len = 0;
+    int trim = 0;
+
+    //check for chars to trim length
+    for (; chars[chars_len] != '\0'; chars_len++);
+
+    for (int i = first->len - 1; i >= 0;) {
+        //check for chars to skipp
+        for (int j = 0; j < chars_len; j++){
+            if (first->string[i] == chars[j]) {
+                trim++;
+                break;
+            }
+        }
+        //exit condition
+        if ((first->len - 1) - --i != trim) {
+            break;
+        }
+    }
+
+    //set null byte at the end of the string
+    first->len -= trim;
+    first->len_null -= trim;
+    first->string[first->len] = '\0';
+
+    return trim;
+}
+
+/*string_t* string_trim_left(string_t* first, char chars[])
 {
     int chars_len = 0;
     int skipp = 0;
@@ -119,10 +189,10 @@ string_t string_trim_left(char _string[], string_t first, char chars[])
     //check for chars to trim length
     for (; chars[chars_len] != '\0'; chars_len++);
 
-    for (int i = 0; i < first.len;) {
+    for (int i = 0; i < first->len;) {
         //check for chars to skipp
         for (int j = 0; j < chars_len; j++){
-            if (first.string[i] == chars[j]) {
+            if (first->string[i] == chars[j]) {
                 skipp++;
                 break;
             }
@@ -136,16 +206,16 @@ string_t string_trim_left(char _string[], string_t first, char chars[])
         }
     }
 
-    for (int i = 0; i <= (first.len - skipp); _string[i] = first.string[skipp + i], i++);
+    for (int i = 0; i <= (first->len - skipp); _string[i] = first->string[skipp + i], i++);
 
     return (string_t) {
         .len = first.len - skipp,
         .len_null = first.len - skipp + 1,
         .string = _string
     };
-}
+}*/
 
-
+/*
 string_t string_trim_right(char _string[], string_t first, char chars[])
 {
     int chars_len = 0;

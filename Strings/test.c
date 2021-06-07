@@ -46,24 +46,26 @@ int main(void)
 
     string_delete(s4);
 
-    //macro expand to
-    //char s3_buffer[s1.len + s2.len_null];
-    //string_t s3 = string_concat(s3_buffer, s1, s2);
-    //STRING_CONCAT(s3, s1, s2);
-    //printf("string_concat s3[%d][%d] [%s]\n", s3.len, s3.len_null, s3.string);
-    
-    //macro expand to
-    //char s4_buffer[s3.len_null];
-    //string_t s4 = string_copy(s4_buffer, s3);
-    //STRING_COPY(s4, s3);
-    //printf("string_copy s3[%s] s4[%s]\n", s3.string, s4.string);
 
-    //string_t s5 = string_init("  \tWord  ");
+
+    string_t* s5 = string_init(" \t \n \t Word   ");
+    printf("string s5[%d][%d] [%s]\n", s5->len, s5->len_null, s5->string);
+
+    result = string_trim_left(s5, " \t\n");
+    printf("result[%d]\n", result);
+    printf("string_trim_left s5[%d][%d] [%s]\n", s5->len, s5->len_null, s5->string);
+
+    result = string_trim_right(s5, " \t\n");
+    printf("result[%d]\n", result);
+    printf("string_trim_right s5[%d][%d] [%s]\n", s5->len, s5->len_null, s5->string);
+
+
     //macro expand to
     //char s6_buffer[s5.len_null];
     //string_t s6 = string_trim_left(s6_buffer, s5, " \t");
     //STRING_TRIM_LEFT(s6, s5, " \t");
-    //printf("string_trim_left s5[%d][%d] [%s]\n", s5.len, s5.len_null, s5.string);
+    //printf("result[%d]\n", result);
+    //printf("string_trim_left s5[%d][%d] [%s]\n", s5->len, s5->len_null, s5->string);
     //printf("string_trim_left s6[%d][%d] [%s]\n", s6.len, s6.len_null, s6.string);
 
     //macro expand to
