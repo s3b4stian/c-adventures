@@ -46,16 +46,17 @@
 //string struct
 typedef struct {
     //string len
-    int len;
+    size_t len;
     //string len + null byte
     //always len + 1
-    int len_null;
+    size_t len_null;
     char *string;
 } string_t;
 
 
 //init
-//first argument is the result of malloc(sizeof(string_t)) 
+//first argument is the result of malloc(sizeof(string_t))
+string_t* string_init_void(string_t* _string, size_t len);
 string_t* string_init_c(string_t* _string, char string[]);
 
 
@@ -83,7 +84,7 @@ string_t* string_trim_right_to_new(string_t* first, char chars[]);
 
 
 //substring of a string
-string_t* string_substring(string_t* first, int from, int to);
+string_t* string_substring(string_t* first, long from, size_t to);
 
 
 //delete a string, free memory
