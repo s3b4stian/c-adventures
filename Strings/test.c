@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include "strings_t.h"
 
+
+
 //compile: gcc test.c strings_t.c
 //valgrind: valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose ./a.out
 int main(void)
@@ -80,18 +82,93 @@ int main(void)
     size_t c = 4;
 
     string_t* s9 = string_init("Hello Word");
-    string_t* s10 = string_substring(s9, 0, c);
-    string_t* s11 = string_substring(s9, -1, c);
-    string_t* s12 = string_substring(s9, -2, c);
-    string_t* s14 = string_substring(s9, -3, c);
-    string_t* s15 = string_substring(s9, -4, c);
-    string_t* s16 = string_substring(s9, -5, c);
-    string_t* s17 = string_substring(s9, -6, c);
-    string_t* s18 = string_substring(s9, -7, c);
-    string_t* s19 = string_substring(s9, -8, c);
-    string_t* s20 = string_substring(s9, -9, c);
-    string_t* s21 = string_substring(s9, -10, c);
-    string_t* s22 = string_substring(s9, -11, c);
+    printf("string s9[%d][%d] [%s]\n", s9->len, s9->len_null, s9->string);
+    string_t* s10 = string_substring(s9, -12, c);
+    string_t* s11 = string_substring(s9, -11, c);
+    string_t* s12 = string_substring(s9, -10, c);
+    string_t* s13 = string_substring(s9, -9, c);
+    string_t* s14 = string_substring(s9, -8, c);
+    string_t* s15 = string_substring(s9, -7, c);
+    string_t* s16 = string_substring(s9, -6, c);
+    string_t* s17 = string_substring(s9, -5, c);
+    string_t* s18 = string_substring(s9, -4, c);
+    string_t* s19 = string_substring(s9, -3, c);
+    string_t* s20 = string_substring(s9, -2, c);
+    string_t* s21 = string_substring(s9, -1, c);
+    string_t* s22 = string_substring(s9, 0, c);
+    string_t* s23 = string_substring(s9, 1, c);
+    string_t* s24 = string_substring(s9, 2, c);
+    string_t* s25 = string_substring(s9, 3, c);
+    string_t* s26 = string_substring(s9, 4, c);
+    string_t* s27 = string_substring(s9, 5, c);
+    string_t* s28 = string_substring(s9, 6, c);
+    string_t* s29 = string_substring(s9, 7, c);
+    string_t* s30 = string_substring(s9, 8, c);
+    string_t* s31 = string_substring(s9, 9, c);
+    string_t* s32 = string_substring(s9, 10, c);
+    string_t* s33 = string_substring(s9, 11, c);
+    string_t* s34 = string_substring(s9, 12, c);
+
+    printf("string s10[%d][%d] [%s]\n", s10->len, s10->len_null, s10->string);
+    printf("string s11[%d][%d] [%s]\n", s11->len, s11->len_null, s11->string);
+    printf("string s12[%d][%d] [%s]\n", s12->len, s12->len_null, s12->string);
+    printf("string s13[%d][%d] [%s]\n", s13->len, s13->len_null, s13->string);
+    printf("string s14[%d][%d] [%s]\n", s14->len, s14->len_null, s14->string);
+    printf("string s15[%d][%d] [%s]\n", s15->len, s15->len_null, s15->string);
+    printf("string s16[%d][%d] [%s]\n", s16->len, s16->len_null, s16->string);
+    printf("string s17[%d][%d] [%s]\n", s17->len, s17->len_null, s17->string);
+    printf("string s18[%d][%d] [%s]\n", s18->len, s18->len_null, s18->string);
+    printf("string s19[%d][%d] [%s]\n", s19->len, s19->len_null, s19->string);
+    printf("string s20[%d][%d] [%s]\n", s20->len, s20->len_null, s20->string);
+    printf("string s21[%d][%d] [%s]\n", s21->len, s21->len_null, s21->string);
+    printf("string s22[%d][%d] [%s]\n", s23->len, s22->len_null, s22->string);
+    printf("string s23[%d][%d] [%s]\n", s23->len, s23->len_null, s23->string);
+    printf("string s24[%d][%d] [%s]\n", s24->len, s24->len_null, s24->string);
+    printf("string s25[%d][%d] [%s]\n", s25->len, s25->len_null, s25->string);
+    printf("string s26[%d][%d] [%s]\n", s26->len, s26->len_null, s26->string);
+    printf("string s27[%d][%d] [%s]\n", s27->len, s27->len_null, s27->string);
+    printf("string s28[%d][%d] [%s]\n", s28->len, s28->len_null, s28->string);
+    printf("string s29[%d][%d] [%s]\n", s29->len, s29->len_null, s29->string);
+    printf("string s30[%d][%d] [%s]\n", s30->len, s30->len_null, s30->string);
+    printf("string s31[%d][%d] [%s]\n", s31->len, s31->len_null, s31->string);
+    printf("string s32[%d][%d] [%s]\n", s32->len, s32->len_null, s32->string);
+    printf("string s33[%d][%d] [%s]\n", s33->len, s33->len_null, s33->string);
+    printf("string s34[%d][%d] [%s]\n", s34->len, s34->len_null, s34->string);
+
+    string_delete(s9);
+    string_delete(s10);
+    string_delete(s11);
+    string_delete(s12);
+    string_delete(s13);
+    string_delete(s14);
+    string_delete(s15);
+    string_delete(s16);
+    string_delete(s17);
+    string_delete(s18);
+    string_delete(s19);
+    string_delete(s20);
+    string_delete(s21);
+    string_delete(s22);
+    string_delete(s23);
+    string_delete(s24);
+    string_delete(s25);
+    string_delete(s26);
+    string_delete(s27);
+    string_delete(s28);
+    string_delete(s29);
+    string_delete(s30);
+    string_delete(s31);
+    string_delete(s32);
+    string_delete(s33);
+    string_delete(s34);
+
+    string_t* s40 = string_init("Hello Word, this is a very long string. Split it!");
+
+    printf("string s40[%d][%d] [%s]\n", s40->len, s40->len_null, s40->string);
+
+    string_split(s40, " ,.!");
+
+    string_delete(s40);
 
     //macro expand to
     //char s6_buffer[s5.len_null];

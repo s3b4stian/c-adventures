@@ -3,7 +3,7 @@
 #include "strings_t.h"
 
 
-string_t* string_init_void(string_t* _string, size_t len)
+string_t* string_init_from_void(string_t* _string, size_t len)
 {
     if (_string) {
     
@@ -29,7 +29,39 @@ string_t* string_init_void(string_t* _string, size_t len)
 }
 
 
-string_t* string_init_c(string_t* _string, char string[])
+string_t* string_init_from_char_len(string_t* _string, char string[], size_t len)
+{
+    if (_string) {
+    
+        //assign struct
+        *_string = (string_t) {
+            .len = len,
+            .len_null = len + 1,
+            .string = calloc(len + 1, 1)
+        };
+
+        //check for malloc
+        if (!_string->string) {
+            _string->len = 0;
+            _string->len_null = 0;
+            return _string;
+        }
+
+        //copy string
+        for (size_t i = 0; i < len; _string->string[i] = string[i], i++); 
+
+        //set nullbyte to the end of the string
+        _string->string[len] = '\0';
+    }
+    else {
+        *_string = (string_t) {0};
+    }
+
+    return _string;
+}
+
+
+string_t* string_init_from_char(string_t* _string, char string[])
 {
     if (_string) {
     
@@ -95,7 +127,7 @@ static int string_concat_internal(string_t* first, char* second, size_t total_le
 }
 
 
-int string_concat_c(string_t* first, char* second)
+int string_concat_char(string_t* first, char* second)
 {
     size_t len = 0;
     //check for string lenght
@@ -108,7 +140,7 @@ int string_concat_c(string_t* first, char* second)
 }
 
 
-int string_concat_st(string_t* first, string_t* second)
+int string_concat_stt(string_t* first, string_t* second)
 {
     //get total len with only last null bytes
     size_t total_len = first->len + second->len_null;
@@ -123,7 +155,7 @@ string_t* string_concat_to_new(string_t* first, string_t* second)
     size_t total_len = first->len + second->len_null;
 
     //initialize the new string with the content of first string
-    string_t* _string = string_init_c(malloc(sizeof(string_t)), first->string);
+    string_t* _string = string_init_from_char_len(malloc(sizeof(string_t)), first->string, first->len);
 
     //do concatenation, if fails return 0 string
     if (string_concat_internal(_string, second->string, total_len) == -1){
@@ -136,7 +168,7 @@ string_t* string_concat_to_new(string_t* first, string_t* second)
 
 string_t* string_copy(string_t *first)
 {
-    return string_init_c(malloc(sizeof(string_t)), first->string);
+    return string_init_from_char_len(malloc(sizeof(string_t)), first->string, first->len);
 }
 
 
@@ -181,7 +213,7 @@ int string_trim_left(string_t* first, char chars[])
 
 string_t* string_trim_left_to_new(string_t* first, char chars[])
 {
-    string_t* _string = string_init_c(malloc(sizeof(string_t)), first->string);
+    string_t* _string = string_init_from_char_len(malloc(sizeof(string_t)), first->string, first->len);
 
     if (_string) {
         string_trim_left(_string, chars);
@@ -224,7 +256,7 @@ int string_trim_right(string_t* first, char chars[])
 
 string_t* string_trim_right_to_new(string_t* first, char chars[])
 {
-    string_t* _string = string_init_c(malloc(sizeof(string_t)), first->string);
+    string_t* _string = string_init_from_char_len(malloc(sizeof(string_t)), first->string, first->len);
 
     if (_string) {
         string_trim_right(_string, chars);
@@ -243,6 +275,7 @@ string_t* string_substring(string_t* first, long from, size_t to)
     //as start to the end of the string
     if (_from < 0) {
         //remove the minus sign
+        //compare a negavive long and a size_t has weird result
         _from = -_from;
     
         if (_from < first->len) {
@@ -259,26 +292,54 @@ string_t* string_substring(string_t* first, long from, size_t to)
     //check for how many chars to extract
     _to = _from + _to;
     if (_to > first->len - 1) {
-        _to = first->len - 1;
+        _to = first->len;
     }
-    printf("1[%d][%d][%d]\n", _from, _to, first->len);
-    
-    //if from greater than string len, point to last char of the string
-    //if (from > first->len) {
-    //    _from = first->len - 1;
-    //}
 
-    //printf("3[%d][%d][%d][%d][%d]\n", _from, _to, from, first->len, from > first->len);
-    
-    
+    //calculate final length without null byte
+    int final_len = _to - _from;
 
+    //init a new void string length
+    //null byte space added automatically by string_init_void
+    string_t* _string = string_init_from_void(malloc(sizeof(string_t)), final_len);
     
-    //int final_len = _to - _from;
-    //printf("4[%d][%d][%d]\n", _from, _to, final_len);
-    //for (size_t i = 0; i < _to - _from; _string[i] = first.string[i + _from], i++);
+    if (_string) {
+        //copy the content of the string
+        for (size_t i = 0; i < _to - _from; _string->string[i] = first->string[i + _from], i++);
 
+        _string->string[final_len] = '\0';
+    }
+
+    return _string;
     
+}
+
+
+string_t** string_split(string_t* first, char chars[])
+{
+
+    int token = 0;
+    string_t* _string = string_init_from_char_len(malloc(sizeof(string_t)), first->string, first->len);
     
+    for (size_t i = 0; i < _string->len; i++) {
+        //check for chars to skipp
+        //replace them with null bytes
+        for (size_t j = 0; j < _string->len; j++){
+            if (first->string[i] == chars[j]) {
+                token++;
+                first->string[i] = '\0';
+                break;
+            }
+        }
+    }
+
+    //if (_string->string[i])
+
+    for (size_t i = 0; i < _string->len; i++) { 
+        
+    }
+
+
+    printf("[%d]\n", token);
 }
 
 

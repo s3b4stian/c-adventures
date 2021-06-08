@@ -2,14 +2,14 @@
 #define _STRINGS_T_H 1
 
 //string init
-#define string_init(S1)                        \
-    string_init_c(malloc(sizeof(string_t)), S1);
+#define string_init(S1)                                  \
+    string_init_from_char(malloc(sizeof(string_t)), S1);
 
 //string concat
-#define string_concat(S1, S2) _Generic(         \
-    (S1, S2),                                   \
-    string_t*: string_concat_st,                \
-    char*: string_concat_c                      \
+#define string_concat(S1, S2) _Generic( \
+    (S1, S2),                           \
+    string_t*: string_concat_stt,       \
+    char*: string_concat_char           \
 )((S1), (S2))
 
 //copy S2 to S1
@@ -56,8 +56,8 @@ typedef struct {
 
 //init
 //first argument is the result of malloc(sizeof(string_t))
-string_t* string_init_void(string_t* _string, size_t len);
-string_t* string_init_c(string_t* _string, char string[]);
+string_t* string_init_from_void(string_t* _string, size_t len);
+string_t* string_init_from_char(string_t* _string, char string[]);
 
 
 //concat to new string
@@ -65,8 +65,9 @@ string_t* string_concat_to_new(string_t* first, string_t* second);
 
 
 //cancat to first string
-int string_concat_c(string_t* first, char* second);
-int string_concat_st(string_t* first, string_t* second);
+//stt is string_t
+int string_concat_char(string_t* first, char* second);
+int string_concat_stt(string_t* first, string_t* second);
 
 
 //string copy
@@ -86,6 +87,9 @@ string_t* string_trim_right_to_new(string_t* first, char chars[]);
 //substring of a string
 string_t* string_substring(string_t* first, long from, size_t to);
 
+//split of a string
+//return an array of pointer to structs
+string_t** string_split(string_t* first, char chars[]);
 
 //delete a string, free memory
 void string_delete(string_t* _string);
