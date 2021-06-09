@@ -317,7 +317,7 @@ string_t* string_substring(string_t* first, long from, size_t to)
 string_t** string_split(string_t* first, char chars[])
 {
 
-    int token = 0;
+    //int token = 0;
     string_t* _string = string_init_from_char_len(malloc(sizeof(string_t)), first->string, first->len);
     
     for (size_t i = 0; i < _string->len; i++) {
@@ -325,21 +325,34 @@ string_t** string_split(string_t* first, char chars[])
         //replace them with null bytes
         for (size_t j = 0; j < _string->len; j++){
             if (first->string[i] == chars[j]) {
-                token++;
-                first->string[i] = '\0';
+                //token++;
+                _string->string[i] = '\0';
                 break;
             }
         }
     }
 
-    //if (_string->string[i])
+    //int *string_pointer = calloc(token, sizeof(int*));
 
+    
     for (size_t i = 0; i < _string->len; i++) { 
-        
+        if ((!_string->string[i]) && i == 0) {
+            continue;
+        }
+
+        if (_string->string[i] && _string->string[i - 1] == '\0') {
+            //continue;
+            printf("--char[%x] Address[%p]\n", _string->string[i], &(_string->string[i]));
+        }
+
+        printf("char[%x] Address[%p]\n", _string->string[i], &(_string->string[i]));
     }
 
+    //free(string_pointer);
 
-    printf("[%d]\n", token);
+    string_delete(_string);
+
+    //printf("[%d]\n", token);
 }
 
 

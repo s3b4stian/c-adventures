@@ -22,7 +22,7 @@ int main(void)
 
     string_delete(s1tmp);
     string_delete(s2tmp);
-
+                                  
     //concat macro, generic
     int result = string_concat(s1, s2);
     result = string_concat(s1, s2);
