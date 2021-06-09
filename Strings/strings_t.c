@@ -14,7 +14,7 @@ string_t* string_init_from_void(string_t* _string, size_t len)
             .string = calloc(len + 1, 1)
         };
 
-        //check for malloc
+        //check for calloc
         if (!_string->string) {
             _string->len = 0;
             _string->len_null = 0;
@@ -40,7 +40,7 @@ string_t* string_init_from_char_len(string_t* _string, char string[], size_t len
             .string = calloc(len + 1, 1)
         };
 
-        //check for malloc
+        //check for calloc
         if (!_string->string) {
             _string->len = 0;
             _string->len_null = 0;
@@ -76,7 +76,7 @@ string_t* string_init_from_char(string_t* _string, char string[])
             .string = calloc(len + 1, 1)
         };
 
-        //check for malloc
+        //check for calloc
         if (!_string->string) {
             _string->len = 0;
             _string->len_null = 0;
@@ -155,7 +155,7 @@ string_t* string_concat_to_new(string_t* first, string_t* second)
     size_t total_len = first->len + second->len_null;
 
     //initialize the new string with the content of first string
-    string_t* _string = string_init_from_char_len(malloc(sizeof(string_t)), first->string, first->len);
+    string_t* _string = string_init_from_char_len(calloc(1, sizeof(string_t)), first->string, first->len);
 
     //do concatenation, if fails return 0 string
     if (string_concat_internal(_string, second->string, total_len) == -1){
@@ -168,7 +168,7 @@ string_t* string_concat_to_new(string_t* first, string_t* second)
 
 string_t* string_copy(string_t *first)
 {
-    return string_init_from_char_len(malloc(sizeof(string_t)), first->string, first->len);
+    return string_init_from_char_len(calloc(1, sizeof(string_t)), first->string, first->len);
 }
 
 
@@ -213,7 +213,7 @@ int string_trim_left(string_t* first, char chars[])
 
 string_t* string_trim_left_to_new(string_t* first, char chars[])
 {
-    string_t* _string = string_init_from_char_len(malloc(sizeof(string_t)), first->string, first->len);
+    string_t* _string = string_init_from_char_len(calloc(1, sizeof(string_t)), first->string, first->len);
 
     if (_string) {
         string_trim_left(_string, chars);
@@ -256,7 +256,7 @@ int string_trim_right(string_t* first, char chars[])
 
 string_t* string_trim_right_to_new(string_t* first, char chars[])
 {
-    string_t* _string = string_init_from_char_len(malloc(sizeof(string_t)), first->string, first->len);
+    string_t* _string = string_init_from_char_len(calloc(1, sizeof(string_t)), first->string, first->len);
 
     if (_string) {
         string_trim_right(_string, chars);
@@ -300,7 +300,7 @@ string_t* string_substring(string_t* first, long from, size_t to)
 
     //init a new void string length
     //null byte space added automatically by string_init_void
-    string_t* _string = string_init_from_void(malloc(sizeof(string_t)), final_len);
+    string_t* _string = string_init_from_void(calloc(1, sizeof(string_t)), final_len);
     
     if (_string) {
         //copy the content of the string
@@ -314,45 +314,54 @@ string_t* string_substring(string_t* first, long from, size_t to)
 }
 
 
-string_t** string_split(string_t* first, char chars[])
+string_t_array* string_split(string_t* first, char chars[])
 {
+    int token = 0;
+    //copy of the string
+    string_t* _string = string_init_from_char_len(calloc(1, sizeof(string_t)), first->string, first->len);
 
-    //int token = 0;
-    string_t* _string = string_init_from_char_len(malloc(sizeof(string_t)), first->string, first->len);
-    
     for (size_t i = 0; i < _string->len; i++) {
         //check for chars to skipp
         //replace them with null bytes
-        for (size_t j = 0; j < _string->len; j++){
+        for (size_t j = 0; chars[j] != '\0'; j++){
+            
             if (first->string[i] == chars[j]) {
-                //token++;
+                token++;
+                
                 _string->string[i] = '\0';
                 break;
             }
         }
     }
 
-    //int *string_pointer = calloc(token, sizeof(int*));
-
+    size_t array_token_len = 0;
+    string_t_array* _string_array = calloc(1, sizeof(string_t_array));
+    _string_array->len_mem = token;
+    _string_array->strings = calloc(token, sizeof(string_t*));
     
-    for (size_t i = 0; i < _string->len; i++) { 
+    /*for (size_t i = 0; i < _string->len; i++) { 
         if ((!_string->string[i]) && i == 0) {
             continue;
         }
-
+        //if first position unable to check i -1
+        //fix it
         if (_string->string[i] && _string->string[i - 1] == '\0') {
-            //continue;
-            printf("--char[%x] Address[%p]\n", _string->string[i], &(_string->string[i]));
+            _string_array->strings[array_token_len++] = string_init_from_char(calloc(1, sizeof(string_t)), _string->string + i);
+            continue;
         }
+    }*/
 
-        printf("char[%x] Address[%p]\n", _string->string[i], &(_string->string[i]));
-    }
-
-    //free(string_pointer);
-
+    //free the copy of the string
     string_delete(_string);
 
-    //printf("[%d]\n", token);
+    //string_t_array* _string_array = calloc(1, sizeof(string_t_array*));
+    _string_array->len = array_token_len;
+    //_string_array->len_mem = token;
+    //_string_array->strings = array_token;
+    //free(_string_array->strings);
+    //free(_string_array);
+
+    return _string_array;
 }
 
 
@@ -360,11 +369,26 @@ void string_delete(string_t* _string)
 {
     if (_string) {
         //delete the string from heap
-        for (int i = 0; i < _string->len_null; _string->string[i] = '\0', i++);
+        for (size_t i = 0; i < _string->len_null; _string->string[i] = '\0', i++);
 
         _string->len = 0;
         _string->len_null = 0;
         free(_string->string);
+        free(_string);
+
+        _string = ((void*)0);
+    }
+}
+
+
+void string_delete_stt_array(string_t_array* _string)
+{
+    if (_string) {
+        //free every string on array
+        for (size_t i = 0; i < _string->len; string_delete(_string->strings[i]), i++);
+        //free the pointer of pointer
+        free(_string->strings);
+        //free the array struct
         free(_string);
 
         _string = ((void*)0);

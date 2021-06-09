@@ -53,6 +53,12 @@ typedef struct {
     char *string;
 } string_t;
 
+typedef struct {
+    size_t len;
+    size_t len_mem;
+    string_t** strings;
+} string_t_array;
+
 
 //init
 //first argument is the result of malloc(sizeof(string_t))
@@ -89,9 +95,10 @@ string_t* string_substring(string_t* first, long from, size_t to);
 
 //split of a string
 //return an array of pointer to structs
-string_t** string_split(string_t* first, char chars[]);
+string_t_array* string_split(string_t* first, char chars[]);
 
 //delete a string, free memory
 void string_delete(string_t* _string);
+void string_delete_stt_array(string_t_array* _string);
 
 #endif

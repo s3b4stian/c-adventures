@@ -162,13 +162,25 @@ int main(void)
     string_delete(s33);
     string_delete(s34);
 
-    string_t* s40 = string_init("Hello Word, this is a very long string. Split it!");
+    //string_t* s40 = string_init("Hello Word, this is a very long string. Split it!");
+    string_t* s40 = string_init("Hello Word ");
 
     printf("string s40[%d][%d] [%s]\n", s40->len, s40->len_null, s40->string);
 
-    string_split(s40, " ,.!");
+    string_t_array* s41 = string_split(s40, " ,.!");
+
+    //string_split(s40, " ,.!");
+
+    //printf("[%d][%d]\n", s41->len, s41->len_mem);
+
+    //for (size_t i = 0; i < s41->len; i++) {
+    //    printf("[%s]", s41->strings[i]->string);
+   // }
+
+    //printf("\n");
 
     string_delete(s40);
+    string_delete_stt_array(s41);
 
     //macro expand to
     //char s6_buffer[s5.len_null];
