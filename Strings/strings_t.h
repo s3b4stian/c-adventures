@@ -5,12 +5,19 @@
 #define string_init(S1)                                  \
     string_init_from_char(malloc(sizeof(string_t)), S1);
 
-//string concat
+//string concat generic
 #define string_concat(S1, S2) _Generic( \
     (S1, S2),                           \
     string_t*: string_concat_stt,       \
     char*: string_concat_char           \
 )((S1), (S2))
+
+//string delete
+#define string_delete(S1) _Generic(          \
+    (S1),                                    \
+    string_t*: string_delete_stt,            \
+    string_t_array*: string_delete_stt_array \
+)(S1)
 
 //copy S2 to S1
 //#define STRING_COPY(S1, S2)                    \
@@ -55,7 +62,7 @@ typedef struct {
 
 typedef struct {
     size_t len;
-    size_t len_mem;
+    //size_t len_mem;
     string_t** strings;
 } string_t_array;
 
@@ -98,7 +105,7 @@ string_t* string_substring(string_t* first, long from, size_t to);
 string_t_array* string_split(string_t* first, char chars[]);
 
 //delete a string, free memory
-void string_delete(string_t* _string);
+void string_delete_stt(string_t* _string);
 void string_delete_stt_array(string_t_array* _string);
 
 #endif

@@ -225,15 +225,15 @@ string_t* string_trim_left_to_new(string_t* first, char chars[])
 
 int string_trim_right(string_t* first, char chars[])
 {
-    size_t chars_len = 0;
+    //size_t chars_len = 0;
     size_t trim = 0;
 
     //check for chars to trim length
-    for (; chars[chars_len] != '\0'; chars_len++);
+    //for (; chars[chars_len] != '\0'; chars_len++);
 
     for (size_t i = first->len - 1; i >= 0;) {
         //check for chars to skipp
-        for (size_t j = 0; j < chars_len; j++){
+        for (size_t j = 0; chars[j] != '\0'; j++) {
             if (first->string[i] == chars[j]) {
                 trim++;
                 break;
@@ -323,7 +323,7 @@ string_t_array* string_split(string_t* first, char chars[])
     for (size_t i = 0; i < _string->len; i++) {
         //check for chars to skipp
         //replace them with null bytes
-        for (size_t j = 0; chars[j] != '\0'; j++){
+        for (size_t j = 0; chars[j] != '\0'; j++) {
             
             if (first->string[i] == chars[j]) {
                 token++;
@@ -334,38 +334,39 @@ string_t_array* string_split(string_t* first, char chars[])
         }
     }
 
-    size_t array_token_len = 0;
-    string_t_array* _string_array = calloc(1, sizeof(string_t_array));
-    _string_array->len_mem = token;
-    _string_array->strings = calloc(token, sizeof(string_t*));
+    string_t_array* 
+    _string_array = calloc(1, sizeof(string_t_array));
+    _string_array->len = 0;
+    _string_array->strings = calloc(++token, sizeof(string_t*));
     
-    /*for (size_t i = 0; i < _string->len; i++) { 
-        if ((!_string->string[i]) && i == 0) {
+    for (size_t i = 0; i < _string->len; i++) { 
+        //null byte
+        if ((!_string->string[i])) {
             continue;
         }
-        //if first position unable to check i -1
-        //fix it
-        if (_string->string[i] && _string->string[i - 1] == '\0') {
-            _string_array->strings[array_token_len++] = string_init_from_char(calloc(1, sizeof(string_t)), _string->string + i);
+        
+        //i equal to zero and null byte
+        if (!i && (!_string->string[i])) {
             continue;
         }
-    }*/
+
+        //i greater than zero, char of i an i-1 not null byte
+        //a char inside other chars
+        if (i && _string->string[i] && _string->string[i - 1]) {
+            continue;
+        }        
+
+        _string_array->strings[_string_array->len++] = string_init_from_char(calloc(1, sizeof(string_t)), _string->string + i);
+    }
 
     //free the copy of the string
-    string_delete(_string);
-
-    //string_t_array* _string_array = calloc(1, sizeof(string_t_array*));
-    _string_array->len = array_token_len;
-    //_string_array->len_mem = token;
-    //_string_array->strings = array_token;
-    //free(_string_array->strings);
-    //free(_string_array);
+    string_delete_stt(_string);
 
     return _string_array;
 }
 
 
-void string_delete(string_t* _string)
+void string_delete_stt(string_t* _string)
 {
     if (_string) {
         //delete the string from heap
