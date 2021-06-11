@@ -1,13 +1,165 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
 #include "strings_t.h"
 
+#define FAIL() printf("Failed at [%d] line\n", __LINE__)
 
+
+int string_init_test()
+{
+    string_t* s1 = string_init("Hello");
+
+    //check proper mem allocation
+    if (s1 == (void*) 0) {
+        FAIL(); goto failure;
+    }
+
+    //check proper len
+    if (s1->len != 5) {
+        FAIL(); goto failure;
+    }
+
+    //check proper len+nullbyte
+    if (s1->len_null != 6) {
+        FAIL(); goto failure;
+    }
+
+    //check equals
+    if (memcmp(s1->string, "Hello", 4)) {
+        FAIL(); goto failure;
+    }
+
+    goto success;
+
+    failure:
+        string_delete(s1);
+        return 1;
+    success:
+        string_delete(s1);
+        return 0;
+}
+
+int string_copy_test()
+{
+    string_t* s1 = string_init("Hello");
+    string_t* s1tmp = string_copy(s1);
+
+    //check proper mem allocation
+    if (s1 == (void*) 0 || s1tmp == (void*) 0) {
+        FAIL(); goto failure;
+    }
+
+    //check equal len
+    if (s1->len != s1tmp->len) {
+        FAIL(); goto failure;
+    }
+
+    //check equal len+nullbyte
+    if (s1->len_null != s1tmp->len_null) {
+        FAIL(); goto failure;
+    }
+
+    goto success;
+
+    failure:
+        string_delete(s1);
+        string_delete(s1tmp);
+        return 1;
+    success:
+        string_delete(s1);
+        string_delete(s1tmp);
+        return 0;
+}
+
+int string_concat_test ()
+{
+    int result;
+
+    string_t* s1 = string_init("A");
+    string_t* s2 = string_init("B");
+    string_t* s3 = string_init("C");
+    string_t* s4 = string_init("D");
+
+    //check proper mem allocation
+    if (s1 == (void*) 0 
+        || s2 == (void*) 0  
+        || s3 == (void*) 0  
+        || s4 == (void*) 0
+    ) {
+        FAIL(); goto failure;
+    }
+
+    result = string_concat(s1, s2);
+
+    //check for proper concat
+    if (result != 2 || memcmp(s1->string, "AB", 2)) {
+        FAIL(); goto failure;
+    }
+
+    result = string_concat(s1, s3);
+
+    //check for proper concat
+    if (result != 3 || memcmp(s1->string, "ABC", 3)) {
+        FAIL(); goto failure;
+    }
+
+    result = string_concat(s1, s4);
+
+    //check for proper concat
+    if (result != 4 || memcmp(s1->string, "ABCD", 4)) {
+        FAIL(); goto failure;
+    }
+
+    result = string_concat(s1, "E");
+
+    //check for proper concat
+    if (result != 5 || memcmp(s1->string, "ABCDE", 5)) {
+        FAIL(); goto failure;
+    }
+
+    result = string_concat(s1, "F");
+
+    //check for proper concat
+    if (result != 6 || memcmp(s1->string, "ABCDEF", 6)) {
+        FAIL(); goto failure;
+    }
+
+    result = string_concat(s1, "G");
+
+    //check for proper concat
+    if (result != 7 || memcmp(s1->string, "ABCDEFG", 7)) {
+        FAIL(); goto failure;
+    }
+
+    goto success;
+
+    failure:
+        string_delete(s1);
+        string_delete(s2);
+        string_delete(s3);
+        string_delete(s4);
+        return 1;
+    success:
+        string_delete(s1);
+        string_delete(s2);
+        string_delete(s3);
+        string_delete(s4);
+        return 0;
+}
 
 //compile: gcc test.c strings_t.c
 //valgrind: valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose ./a.out
 int main(void)
 {
+    //tests
+    //all code below will be rewritten as test
+    printf("test string init:\t[%s]\n", string_init_test() ? "failure" : "success");
+    printf("test string copy:\t[%s]\n", string_copy_test() ? "failure" : "success");
+    printf("test string concat:\t[%s]\n", string_concat_test() ? "failure" : "success");
+
+
     //init macro
     string_t* s1 = string_init("Hello");
     printf("string_init s1[%d][%d] [%s]\n", s1->len, s1->len_null, s1->string);
@@ -15,6 +167,7 @@ int main(void)
     //init macro
     string_t* s2 = string_init(" Word");
     printf("string_init s2[%d][%d] [%s]\n", s2->len, s2->len_null, s2->string);
+
 
     //copy function
     string_t* s1tmp = string_copy(s1);
@@ -180,36 +333,25 @@ int main(void)
     string_delete(s40);
     string_delete(s41);
 
-    //macro expand to
-    //char s6_buffer[s5.len_null];
-    //string_t s6 = string_trim_left(s6_buffer, s5, " \t");
-    //STRING_TRIM_LEFT(s6, s5, " \t");
-    //printf("result[%d]\n", result);
-    //printf("string_trim_left s5[%d][%d] [%s]\n", s5->len, s5->len_null, s5->string);
-    //printf("string_trim_left s6[%d][%d] [%s]\n", s6.len, s6.len_null, s6.string);
 
-    //macro expand to
-    //char s7_buffer[s6.len_null];
-    //string_t s7 = string_trim_right(s7_buffer, s6, " \n");
-    //STRING_TRIM_RIGHT(s7, s6, " \n");
-    //printf("string_trim_right s6[%d][%d] [%s]\n", s6.len, s6.len_null, s6.string);
-    //printf("string_trim_right s7[%d][%d] [%s]\n", s7.len, s7.len_null, s7.string);
+    string_t* s50 = string_init("string to compare");
+    string_t* s51 = string_init("string to compare");
+    string_t* s52 = string_init("string different!");
+    string_t* s53 = string_init("longer string different!");
 
-    //macro expand to
-    //s7.len = 0;
-    //s7.len_null = 0;
-    //string_zero(s7);
-    //STRING_ZERO(s7);
-    //printf("string_zero s7[%d][%d] [%s]\n", s7.len, s7.len_null, s7.string);
+    printf("string s50[%d][%d] [%s]\n", s50->len, s50->len_null, s50->string);
+    printf("string s51[%d][%d] [%s]\n", s51->len, s51->len_null, s51->string);
+    printf("string s52[%d][%d] [%s]\n", s52->len, s52->len_null, s52->string);
+    printf("string s53[%d][%d] [%s]\n", s53->len, s53->len_null, s53->string);
 
+    printf("compare s50 == s51 [%d] expected [1]\n", string_compare(s50, s51));
+    printf("compare s50 == s52 [%d] expected [0]\n", string_compare(s50, s52));
+    printf("compare s50 == s53 [%d] expected [0]\n", string_compare(s50, s53));
 
-    //string_t s9 = string_init("abcdef");
-    //printf("string_init s9[%d][%d] [%s]\n", s9.len, s9.len_null, s9.string);
-    //macro expand to
-    //char s8_buffer[s4.len_null];
-    //string_t s8 = string_substring(s8_buffer, s9, 2, 2);
-    //STRING_SUBSTRING(s8, s9, 2, 2);
-    //printf("string_substring(s9, 2, 2) s8[%d][%d] [%s]\n", s8.len, s8.len_null, s8.string);
+    string_delete(s50);
+    string_delete(s51);
+    string_delete(s52);
+    string_delete(s53);
 
     return 0;
 }

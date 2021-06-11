@@ -1,5 +1,4 @@
 #include <stdlib.h>
-#include <stdio.h>
 #include "strings_t.h"
 
 
@@ -63,37 +62,11 @@ string_t* string_init_from_char_len(string_t* _string, char string[], size_t len
 
 string_t* string_init_from_char(string_t* _string, char string[])
 {
-    if (_string) {
-    
-        size_t len = 0;
-        //check for string lenght
-        for (; string[len] != '\0'; len++);
+    size_t len = 0;
+    //check for string lenght
+    for (; string[len] != '\0'; len++);
 
-        //assign struct
-        *_string = (string_t) {
-            .len = len,
-            .len_null = len + 1,
-            .string = calloc(len + 1, 1)
-        };
-
-        //check for calloc
-        if (!_string->string) {
-            _string->len = 0;
-            _string->len_null = 0;
-            return _string;
-        }
-
-        //copy string
-        for (size_t i = 0; i < len; _string->string[i] = string[i], i++); 
-
-        //set nullbyte to the end of the string
-        _string->string[len] = '\0';
-    }
-    else {
-        *_string = (string_t) {0};
-    }
-
-    return _string;
+    return string_init_from_char_len(_string, string, len);
 }
 
 
@@ -120,7 +93,7 @@ static int string_concat_internal(string_t* first, char* second, size_t total_le
         //set null byte at the end of the string
         first->string[total_len - 1] = '\0';
 
-        return total_len;
+        return total_len - 1;
     }
 
     return -1;
@@ -316,10 +289,11 @@ string_t* string_substring(string_t* first, long from, size_t to)
 
 string_t_array* string_split(string_t* first, char chars[])
 {
-    int token = 0;
     //copy of the string
     string_t* _string = string_init_from_char_len(calloc(1, sizeof(string_t)), first->string, first->len);
 
+    //number of token
+    int token = 0;
     for (size_t i = 0; i < _string->len; i++) {
         //check for chars to skipp
         //replace them with null bytes
@@ -341,12 +315,12 @@ string_t_array* string_split(string_t* first, char chars[])
     
     for (size_t i = 0; i < _string->len; i++) { 
         //null byte
-        if ((!_string->string[i])) {
+        if (!_string->string[i]) {
             continue;
         }
         
         //i equal to zero and null byte
-        if (!i && (!_string->string[i])) {
+        if (!i && !_string->string[i]) {
             continue;
         }
 
@@ -363,6 +337,42 @@ string_t_array* string_split(string_t* first, char chars[])
     string_delete_stt(_string);
 
     return _string_array;
+}
+
+
+int string_compare(string_t* first, string_t* second)
+{
+    size_t len = 0;
+    size_t res = 0;
+
+    //check for the longer string
+    if (first->len > second->len) {
+        len = second->len;
+        res = 1;
+    }
+
+    //check for the longer string
+    if (first->len < second->len) {
+        len = first->len;
+        res = 1;
+    }
+
+    //check for equals strings
+    if (first->len == second->len) {
+        len = first->len;
+        res = 0;
+    }
+
+    //compare strings for the size of the shorter string
+    //if the length of the string is different
+    //res will be already not zero
+    for (size_t i = 0; i < len; i++) {
+        //bitwise xor ^ of 2 equals == 0
+        //bitwise or |= return 1 if at least one is true
+        res |= first->string[i] ^ second->string[i];
+    }
+
+    return res == 0;
 }
 
 
@@ -386,7 +396,7 @@ void string_delete_stt_array(string_t_array* _string)
 {
     if (_string) {
         //free every string on array
-        for (size_t i = 0; i < _string->len; string_delete(_string->strings[i]), i++);
+        for (size_t i = 0; i < _string->len; string_delete_stt(_string->strings[i]), i++);
         //free the pointer of pointer
         free(_string->strings);
         //free the array struct
