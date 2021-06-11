@@ -19,36 +19,6 @@
     string_t_array*: string_delete_stt_array \
 )(S1)
 
-//copy S2 to S1
-//#define STRING_COPY(S1, S2)                    \
-//    char S1##_buffer[S2.len_null];             \
-//    string_t S1 = string_copy(S1##_buffer, S2)
-
-//concat S1 to S2 and put result in S2
-//#define STRING_CONCAT(S3, S1, S2)                    \
-//    char S3##_buffer[S1.len + S2.len_null];          \
-//    string_t S3 = string_concat(S3##_buffer, S1, S2)
-
-//trim left string S1 considering chars in S2 and put result in S3
-//#define STRING_TRIM_LEFT(S3, S1, S2)                    \
-//    char S3##_buffer[S1.len_null];                      \
-//    string_t S3 = string_trim_left(S3##_buffer, S1, S2)
-
-//trim right string S1 considering chars in S2 and put result in S3
-//#define STRING_TRIM_RIGHT(S3, S1, S2)                    \
-//    char S3##_buffer[S1.len_null];                       \
-//    string_t S3 = string_trim_right(S3##_buffer, S1, S2)
-
-//creat a substring from S1 from S to E position and put result in S3
-//#define STRING_SUBSTRING(S3, S1, S, E)                    \
-//    char S3##_buffer[S1.len_null];                        \
-//    string_t S3 = string_substring(S3##_buffer, S1, S, E)
-
-//fill S1 string with null chars
-//#define STRING_ZERO(S1) \
-//    S1.len = 0;         \
-//    S1.len_null = 0;    \
-//    string_zero(S1)
 
 //string struct
 typedef struct {
@@ -59,10 +29,9 @@ typedef struct {
     size_t len_null;
     char *string;
 } string_t;
-
+//array of strings structs
 typedef struct {
     size_t len;
-    //size_t len_mem;
     string_t** strings;
 } string_t_array;
 
@@ -100,9 +69,15 @@ string_t* string_trim_right_to_new(string_t* first, char chars[]);
 //substring of a string
 string_t* string_substring(string_t* first, long from, size_t to);
 
+
 //split of a string
 //return an array of pointer to structs
 string_t_array* string_split(string_t* first, char chars[]);
+
+
+//compare a string
+string_t string_compare(string_t* first, string_t* second);
+
 
 //delete a string, free memory
 void string_delete_stt(string_t* _string);
