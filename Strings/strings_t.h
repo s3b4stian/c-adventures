@@ -84,6 +84,13 @@ string_t_array* string_split(string_t* first, char chars[]);
 int string_compare(string_t* first, string_t* second);
 
 
+//find inside a string
+//todo, check for the proper return type
+char* string_find_char(string_t* first, char c);
+char* string_find_string_stt(string_t* first, string_t* second);
+char* string_find_string_char(string_t* first, char chars[]);
+
+
 //delete a string, free memory
 void string_delete_stt(string_t* _string);
 void string_delete_stt_array(string_t_array* _string);
