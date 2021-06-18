@@ -42,27 +42,36 @@ void show_round(void)
     printf("Rounding=%s\n\n", rs);
 }
 
-//compile: gcc fenv.c -lm
+//compile: gcc fenv_environment.c -lm
 int main(void)
 {
+    //exposes statuses of the current floating-point exceptions and rounding settings
     show_exc();
     show_round();
 
+    //save the environment state
     fenv_t env;
-    fegetenv( & env);
+    fegetenv(& env);
+
+    //change the rounding setting and provoke some exceptions to raise
     fesetround(FE_TOWARDZERO);
     float x = 1.f, y = 0.f;
     printf("%f\n", x / y);
     printf("%f\n", sqrtf(-x));
+
+    //print the current state
     show_exc();
     show_round();
 
+    //update the environment (raised exceptions remain unchanged)
     feupdateenv( & env);
     show_exc();
     show_round();
 
+    //restore the whole previous environment
     fesetenv(&env);
     show_exc();
     show_round();
+
     return 0;
 }

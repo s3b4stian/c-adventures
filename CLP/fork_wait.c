@@ -31,5 +31,6 @@ int main(void)
     int child = wait(&status);
 
     printf("PID=%d, retcode=%d\n", child, WEXITSTATUS(status));
+
     return 0;
 }
