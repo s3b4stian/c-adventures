@@ -76,22 +76,31 @@ int main (int argc, char *argv[])
     //raw_socket = socket(AF_INET, SOCK_RAW, protocol);
     int sock;
     CALL((sock = socket(AF_INET, SOCK_STREAM, pent->p_proto)) > 0);
-    
+    //initiate a connection on a socket
+    //struct sockaddr{
+    //  sa_family_t   sa_family    // address family
+    //  char          sa_data[]    // socket address (variable-length data)
+    //};
     CALL((connect(sock, (struct sockaddr *) &addr, sizeof(struct sockaddr))) == 0);
 
     char buff[1024 + 1];
     sprintf(buff, "GET / HTTP/1.1\r\nHost: %s\r\nConnection: close\r\n\r\n",argv[1]);
 
-    CALL (write (sock, buff, strlen (buff)) == strlen (buff));
+    //write to socket
+    CALL(write(sock, buff, strlen (buff)) == strlen (buff));
 
+    //read from socket
     int readin = read(sock, buff, sizeof(buff) - 1);
+    //while there is stuff to read, lenght of stuff read > 0
     while (readin > 0) {
         buff[readin] = '\0';
         printf ("%s", buff);
+        //read one more time
         readin = read(sock, buff, sizeof(buff) - 1);
     }
 
-    close (sock);
+    // close the socket
+    close(sock);
 
     return 0;
 }
