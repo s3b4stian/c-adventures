@@ -104,3 +104,28 @@ int main (int argc, char *argv[])
 
     return 0;
 }
+
+
+
+/*
+
+Server                 Client
+
+socket()
+ |
+\|/
+bind()
+ |
+\|/
+listen()               socket()
+ |                      |
+\|/                    \|/
+accept()  <--------->  connect()
+ |                      |
+\|/                    \|/
+read()    <---------   write()
+ |                      |
+\|/                    \|/
+write()    --------->  read()
+
+*/
