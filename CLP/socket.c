@@ -40,7 +40,7 @@ int main (int argc, char *argv[])
     //returns a protoent structure for
     //the entry from the database that matches the protocol name name.
     CALL((pent = getprotobyname("tcp")) != NULL);
-
+    printf("p_proto -> %d\n", pent->p_proto);
 
     //struct hostent {
     //  char  *h_name;      // official name of host
