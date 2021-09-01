@@ -7,7 +7,7 @@ int sum (int p1, int p2)
 }
 
 int main(void) {
-    //pointer to function that has as args two ints
+    //pointer to function that has as args two ints and return an int
     int (*sum_ptr) (int, int);
     sum_ptr = sum;
 

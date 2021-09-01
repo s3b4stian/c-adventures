@@ -5,7 +5,7 @@
 
 #define THREADS 8
 
-void*  some_action(void * data) {
+void* some_action(void * data) {
     char * msg = (char * ) data;
     //get the identity of the thread
     pthread_t self = pthread_self();

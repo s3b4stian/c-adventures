@@ -7,9 +7,9 @@ int main (void)
     char s2[] = { 'x', 'x', 'x', 'x' };
 
     //copy 4 bytes from s1 to s2 and stop before if one of these bytes contains c char
-    char *p = memccpy (s2, s1, 'c', 4);
+    char *p1 = memccpy (s2, s1, 'c', 4);
     
-    printf ("%c%c%c%c %c\n", s2[0], s2[1], s2[2], s2[3], *p);
+    printf ("%c%c%c%c %c\n", s2[0], s2[1], s2[2], s2[3], *p1);
     
     short int t1[] = { 1, 2, 3 };
     short int t2[] = { 0, 0, 0 };
@@ -21,9 +21,9 @@ int main (void)
     //Don’t forget this basic memccpy() feature.
     //BE 00 01  00 02  00 03
     //LE 01 00  02 00  03 00
-    char *p = memccpy (t2, t1, 0, sizeof (t1));
+    char *p2 = memccpy (t2, t1, 0, sizeof (t1));
     
-    printf ("%d %d %d %d\n", t2[0], t2[1], t2[2], *p);
+    printf ("%d %d %d %d\n", t2[0], t2[1], t2[2], *p2);
     
     return 0;
 }
