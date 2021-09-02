@@ -3,6 +3,11 @@
 
 #pragma comment(lib, "ws2_32.lib")
 
+//uint32_t htonl (uint32_t hostlong);   host to network long
+//uint16_t htons (uint16_t hostshort);  host to network short
+//uint32_t ntohl (uint32_t netlong);    network to host long
+//uint16_t ntohs (uint16_t netshort);   network to host short
+
 #define CALL(x) if (!(x) && fprintf(stderr, "'%s' failed (error=%d)\n", #x, WSAGetLastError())) exit(1)
 
 int main(int argc, char * argv[]) {

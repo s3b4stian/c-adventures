@@ -3,6 +3,25 @@
 #include <math.h>
 #include <float.h>
 
+
+//The functions return zero on success and non-zero on error, unless stated otherwise.
+// - the feclearexcept() function clears exceptions specified by the bit mask passed in an argument;
+// - the fegetexceptflag() function stores (in the variable pointed to by the first argument) the current state of the exceptions specified by the second argument;
+// - the feraiseexcept() function raises exceptions specified by the bit mask passed in an argument;
+// - the fesetexceptflag() function sets the current state of exceptions pointed to by the first argument to the one specified by the second argument; 
+//                         the value pointed to by flagp has to be fetched earlier by invoking fegetexceptflag() with all the second argument’s bits set; 
+//                         the exceptions denoted in the second argument are not raised; note: the FENV_ACCESS pragma should be set to ON for the function;
+// - the fetestexcept() function returns a bit mask reflecting those exceptions which are specified in the argument and are currently raised.
+
+
+// These three functions operate on the floating-point environment - look at the editor.
+// the functions return zero on success and non-zero on error;
+// - fegetenv() stores the current state of the floating-point environment in a variable pointed to by the argument;
+// - fesetenv() restores the state of the floating-point environment from the variable pointed to by the argument;
+// - feupdateenv() acts like fesetenv() but currently raised exceptions are not cleared.
+
+
+
 //check for the exception raised
 #define _show_exc(x) printf(#x "=%s; ", fetestexcept(x) ? "ON" : "OFF")
 

@@ -8,6 +8,11 @@
 #include <unistd.h>
 #include <sys/ioctl.h>
 
+//uint32_t htonl (uint32_t hostlong);   host to network long
+//uint16_t htons (uint16_t hostshort);  host to network short
+//uint32_t ntohl (uint32_t netlong);    network to host long
+//uint16_t ntohs (uint16_t netshort);   network to host short
+
 #define h_addr h_addr_list[0] /* for backward compatibility */
 
 //check if returned pointer is null

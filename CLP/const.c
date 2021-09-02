@@ -55,9 +55,9 @@ int main(void) {
 
     //more 5,6 and 7
     char str[] = "string";
-	char const *s1 = str; //pointer to const
-	char * const s2 =str; //const pointer to variable
-	char const * const s3 = str; //const pointer to const variable
+	char const *s1 = str; //pointer to const qualified char
+	char * const s2 = str; //const pointer to char variable
+	char const * const s3 = str; //const pointer to const qualified char variable
 	s1[1] = 'S';
 	s2[2] = 'S';
 	s3[3] = 'S';
