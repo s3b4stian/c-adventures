@@ -37,7 +37,7 @@ int main(void)
     
     for (c = 0; c < CHILDREN; c++) {
         printf("Parent: waiting for child #%d\n", c);
-        int status, child = waitpid(pids[c], & status, 0);
+        int status, child = waitpid(pids[c], &status, 0);
         printf("Parent: child #%d exited: PID=%d, retcode=%d\n",
             c, child, WEXITSTATUS(status));
     }

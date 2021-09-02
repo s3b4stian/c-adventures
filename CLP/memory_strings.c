@@ -15,7 +15,7 @@ int main(void) {
     //pointer to strings are different
     printf("%s\n", s1 == s2 ? "equal" : "not equal");
 
-    //free the momory for the string created using strdup
+    //free the memory for the string created using strdup
     free(s2);
 
     //manipulate memory blocks

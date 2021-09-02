@@ -51,14 +51,18 @@ int main(void) {
     
     for (int i = 0; i < THREADS; i++)
         data[i] = i + 1;
-    for (int i = 0; i < THREADS; i++)
+
+    for (int i = 0; i < THREADS; i++) {
         thrd_create(threads + i, thread, data + i);
-    for (int i = 0; i < THREADS; i++)
+    }
+
+    for (int i = 0; i < THREADS; i++) {
         thrd_join(threads[i], NULL);
+    }
     
     printf("Results: cnt=%d, sum=%d\n", cnt, sum);
     
-    mtx_destroy( & mutex);
+    mtx_destroy(&mutex);
     
     return 0;
 }

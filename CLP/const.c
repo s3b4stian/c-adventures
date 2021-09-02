@@ -67,14 +67,14 @@ int main(void) {
 	printf("%s %s %s\n", s1, s2, s3);
 
     //case 8
-    //non const pointers should not be assigned with pointers to const variables.
+    //non const qualified pointers should not be assigned with pointers to const variables.
     int const v = 1;
-	const *p = &v; //compiler warning
+	int const *p = &v; //compiler warning, assign the address of a const qualified variable to a pointer to const qualified variable
 
     //case 9
-    //pointer to a non const variable may be assigned to const pointers
+    //pointer to a non const variable may be assigned to const qualified pointers
     int v = 1;
-	const int *p = &v; //ok
+	int *const p = &v; //ok
 
 	return 0;
 }

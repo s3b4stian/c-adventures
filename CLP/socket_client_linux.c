@@ -51,7 +51,7 @@ int main(int argc, char * argv[]) {
 
     //create the socket
     int sock;
-    CALL((sock = socket(AF_INET, SOCK_STREAM, pent -> p_proto)) > 0);
+    CALL((sock = socket(AF_INET, SOCK_STREAM, pent->p_proto)) > 0);
 
     //make connection
     CALL((connect(sock, (struct sockaddr * ) &addr, sizeof(struct sockaddr))) == 0);

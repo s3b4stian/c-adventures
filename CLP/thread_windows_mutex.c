@@ -8,8 +8,7 @@ HANDLE mutex;
 int sum = 0;
 int cnt = 0;
 
-DWORD WINAPI
-thread(LPVOID *data)
+DWORD WINAPI thread(LPVOID *data)
 {
     int *p = (int *)data;
 

@@ -1,8 +1,9 @@
 #include <stdio.h>
 
-int main(int argc, char * argv[], char ** env) 
+int main(int argc, char * argv[], char ** env) // or
+//int main(int argc, char * argv[], char *env[]) 
 {
-    char ** p = env;
+    char **p = env;
     int n = 1;
 
     while ( * p) {

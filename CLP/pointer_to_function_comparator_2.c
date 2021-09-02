@@ -8,14 +8,14 @@ typedef struct {
 }
 person_t;
 
-person_t * person_init(char * name, int age) {
+person_t * person_init(char *name, int age) {
     person_t * new = malloc(sizeof(person_t));
     strcpy(new -> name, name);
     new -> age = age;
     return new;
 }
 
-void print(person_t ** base, person_t ** found) {
+void print(person_t **base, person_t **found) {
     if (found)
         printf("[%ld](%s, %d)\n", found - base, ( * found) -> name, ( * found) -> age);
     else
