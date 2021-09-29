@@ -13,6 +13,7 @@ int main(void) {
     "Who cut off their tails with a carving knife,"
     "Did you ever see such a sight in your life,";
     
+    // search the substring all inside the string rhyme
     char * p = strstr(rhyme, "all");
     
     while (p) {
