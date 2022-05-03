@@ -1,4 +1,4 @@
-# MISP asseby, run it on MARS emulator
+# MISP assembly, run it on MARS emulator
 .data
     N1: .word 10
     N2: .word 20
