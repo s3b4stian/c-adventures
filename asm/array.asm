@@ -1,7 +1,7 @@
 # MISP assembly, run it on MARS emulator
 .globl main
 .data
-    vector: .word 20, 15, 18, 22, 33, 50, 69
+    vector: .word 20, 75, 18, 22, 33, 50, 69
     v_size: .word 7
 .text
 main:
@@ -26,12 +26,12 @@ main:
         syscall
 
         lw      $t4, vector($t3)    # load the current vector value to $t4
-        
-        ble     $t4, $t0, else      # brach less equals if $t4 is less than the current max
+
+        ble     $t4, $t0, end_if      # brach less equals if $t4 is less than the current max
             nop
-            move    $t0, $t1        # else update the max
-        
-        else:
+            move    $t0, $t4        # else update the max
+
+        end_if:
 
         addi    $t2, $t2, 1         # increment i
 
