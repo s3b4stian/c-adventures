@@ -14,46 +14,49 @@
     C: .word 0
 .text
 main:
-    lw      $t0, C
-    li      $t1, 10
+    lw $t0, C
+    li $t1, 10
 
     while:
-        bge     $t0, $t1, end_while # branch to "end_while" on $t1 less than C
+        bge $t0, $t1, end_while     # branch to "end_while" on $t1 less than C
 
-        move    $a0, $t0            # move number to $a0 as argument for syscall
-        li      $v0, 1              # select the required syscall loading value in $v0 print int
+        # print
+        move $a0, $t0               # move number to $a0 as argument for syscall
+        li $v0, 1                   # select the required syscall loading value in $v0 print int
         syscall
 
-        li      $a0, ' '            # load immediate a space to $a0 for syscall
-        li      $v0, 11             # select the required syscall loading value in $v0 print char
+        li $a0, ' '                 # load immediate a space to $a0 for syscall
+        li $v0, 11                  # select the required syscall loading value in $v0 print char
         syscall
+        # end print
 
-        addi    $t0, $t0, 1         # increment $t0 X
+        addi $t0, $t0, 1            # increment $t0 X
 
         j while
 
     end_while:
         nop
 
-    li      $t0, 10
+    li $t0, 10
 
+    # while, $t0 != 0
     other_while:
         beqz $t0, end_other_while
         
-        move    $a0, $t0            # move number to $a0 as argument for syscall
-        li      $v0, 1              # select the required syscall loading value in $v0 print int
+        move $a0, $t0               # move number to $a0 as argument for syscall
+        li $v0, 1                   # select the required syscall loading value in $v0 print int
         syscall
 
-        li      $a0, ' '            # load immediate a space to $a0 for syscall
-        li      $v0, 11             # select the required syscall loading value in $v0 print char
+        li $a0, ' '                 # load immediate a space to $a0 for syscall
+        li $v0, 11                  # select the required syscall loading value in $v0 print char
         syscall
 
-        subi    $t0, $t0, 1         # decrement $t0 X
+        subi $t0, $t0, 1            # decrement $t0 X
 
         j other_while
 
     end_other_while:
     	nop
 
-    li      $v0, 10                 # select the required syscall loading value in $v0 exit
+    li $v0, 10      # select the required syscall loading value in $v0 exit
     syscall
