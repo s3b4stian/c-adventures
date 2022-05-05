@@ -1,8 +1,8 @@
 # MISP assembly, run it on MARS emulator
 .globl main
 .data
-    matrix: .word 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15     # matrix with 400 elements
-    m_side: .word 4                                         # matrix side, 20x20 = 400
+    matrix: .word 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15     # matrix with 16 elements
+    m_side: .word 4                                         # matrix side, 4x4 = 16
 .text
 main:
 
