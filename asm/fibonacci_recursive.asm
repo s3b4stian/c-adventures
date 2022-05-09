@@ -5,7 +5,8 @@ main:
     li $v0, 5       # read a integer from keyboard         
     syscall         # syscall to read the integer
 
-    move $a0, $v0   # move the result of syscall in $t0, the destination
+    move $a0, $v0   # move the result of syscall in $a0, the destination N value
+    move $fp, $sp
 
     jal fibonacci   # call the function fibonacci
     nop
@@ -20,54 +21,46 @@ main:
 # function fibonacci
 # recursive version
 fibonacci:
-    # save registers on stack
-    subi $sp, $sp, 16       # create space on stack, 4 words
-    sw $ra, 0($sp)          # store return address
-    sw $a0, 4($sp)          # store N value
-    sw $v1, 8($sp)          # store N - 1
-    sw $t0, 12($sp)         # buffer
-    # end save
+    subi $sp, $sp, 16
+    sw $ra, 8($sp)
+    sw $fp, 4($sp)
+    sw $s0, 0($sp)
 
-    li $t0, 2               # N = 2
-    blt $a0, $t0, base_case  # if N < 2 then jump to base case
+    move $fp, $sp
+
+    sw $a0, 12($fp)
+    lw  $v0, 12($fp)
     nop
 
-    sub $a0, $a0, 1         # decrement N to N - 1
-
-    jal fibonacci           # recursive call for N - 1
+    li $t0, 1
+    ble $v0, $t0, base_case
+    nop
+    lw  $v0, 12($fp)
     nop
 
-    move $v1, $v0
-
-    sub $a0, $a0, 1         # decrement N to N - 2
-
-    jal fibonacci           # recursive call for N - 2
+    sub $v0, $v0, 2
+    move $a0, $v0
+    jal fibonacci
     nop
 
-    # once base_case, $ra contain the address of the first lw
-    # execution restart from here 
+    move $s0, $v0
 
-    # restore register from stack
-    lw $ra, 0($sp)
-    lw $a0, 4($sp)
-    lw $v1, 8($sp)
-    lw $t0, 12($sp)
-    addi $sp, $sp, 16
-    # end restore
-
-    add $v0, $v0, $v1       # N - 1 + N - 2
-
-    jr $ra
+    lw  $v0, 12($fp)
     nop
+
+    sub $v0, $v0, 1
+    move $a0, $v0
+    jal fibonacci
+    nop
+
+    add $v0, $s0, $v0   
 
     base_case:
-        li $v0, 1
+        move $sp, $fp
+        lw $ra, 8($sp)
+        lw $fp, 4($sp)
+        lw $s0, 0($sp)
 
-        lw $ra, 0($sp)
-        lw $a0, 4($sp)
-        lw $v1, 8($sp)
-        lw $t0, 12($sp)
         addi $sp, $sp, 16
-
         jr $ra
         nop
