@@ -5,7 +5,7 @@ main:
     li $v0, 5       # read a integer from keyboard           
     syscall         # syscall to read the integer
 
-    move $a0, $v0   # move the result of syscall in $t0, the destination
+    move $a0, $v0   # move the result of syscall in $a0, the destination
 
     jal factorial   # call the function factorial
     nop
