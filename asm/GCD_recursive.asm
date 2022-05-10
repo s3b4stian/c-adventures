@@ -30,19 +30,20 @@ GCD:
     sw $a0, 4($sp)                  # store first argument
     sw $a1, 8($sp)                  # store second argument
 
+    addi $s0, $s0, 1	            # count recursion for barbatrucco
 
     beq $a0, $a1, base_case         # if the argumets of this function are equals jump to base case, x = y, GCD(x, y) = x
     nop
 
     bgt $a0, $a1, invert_arguments  # if first argument is greater than second then inver arguments, x > y, GCD(x, y) = GCD(y, x)
     nop                             # if not then first argument as first, second - first as second, x < y, GCD(x, y) = GCD(x, y – x)
-    
+
     sub $t0, $a1, $a0               # perform y - x
     move $a1, $t0                   # change the second arguments
-    
+
     j recursive                     # jump to recursion
     nop
-    
+
     invert_arguments:
         move $t0, $a0
         move $a0, $a1
@@ -52,8 +53,16 @@ GCD:
        jal GCD
        nop
 
-    lw $ra, 0($sp)                  # return to base case is here
-    addi $sp, $sp, 12               # start to restore the stack
+    # fast exit, barbatrucco
+    subi $s0, $s0, 1
+    mul $s0, $s0, 3                 # function call * 3
+    mul $s0, $s0, 4                 # shift to left 2
+    add $sp, $sp, $s0
+    lw $ra, 0($sp)	
+
+    # normal exit, it walk the stack frame until finds the $ra to exit
+    #lw $ra, 0($sp)                  # return to base case is here
+    #addi $sp, $sp, 12               # start to restore the stack
 
     jr $ra                          # jump to previous stack frame, knowing how many stack frames it is possible to exit fast
     nop
