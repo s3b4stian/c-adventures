@@ -23,7 +23,7 @@ main:
     syscall
 
     li $a0, ' '                 # print space
-    li $v0, 11		
+    li $v0, 11
     syscall
 
     move $a0, $v1               # print second returned value
