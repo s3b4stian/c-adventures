@@ -1,8 +1,9 @@
+# MISP assembly, run it on MARS emulator
 .globl main
 .data
 
-phrase: .asciiz "a phr4se With some Numb3rs 09872 and some words."
-ph_len: .word 48
+    phrase: .asciiz "a phr4se With some Numb3rs 09872 and some words."
+    ph_len: .word 48
 
 .text
 

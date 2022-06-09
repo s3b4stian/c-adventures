@@ -1,9 +1,10 @@
+# MISP assembly, run it on MARS emulator
 .globl main
 
 .data
-S: .asciiz "0&5"
-D: .word 3
-B: .byte 0x27
+    S: .asciiz "0&5"
+    D: .word 3
+    B: .byte 0x27
 
 .text
 

@@ -46,10 +46,10 @@
 
 .data
 
-hex: .asciiz "0123456789ABCDEF"
-S:     .byte   0:100
-A:     .byte   0:100
-B:     .byte   0
+    hex: .asciiz "0123456789ABCDEF"
+    S:     .byte   0:100
+    A:     .byte   0:100
+    B:     .byte   0
 
 .text
 
