@@ -1,0 +1,304 @@
+<html>
+
+<head>
+    <style>
+        body {
+            color: black;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        h1 {
+            margin-top: 60px;
+        }
+
+        h2 {
+            margin-top: 40px;
+            line-height: 1.5;
+        }
+
+        pre {
+            border-left: 5px solid #a00;
+            padding-left:12px;
+        }
+    </style>
+</head>
+
+<body>
+    <div
+        style="width:100ch;margin-left:auto;margin-right:auto; border:1px solid #ccc;border-top:none;border-bottom:none; padding:20px;text-align: justify;padding-top:none;">
+        <h1 id="colonnade">Colonnade</h1>
+        <p>A program to paginate text files.</p>
+        <h2 id="compiling">Compiling</h2>
+        <p>To compile the program:</p>
+        <pre><code><span class="hljs-attribute">make</span>
+</code></pre>
+        <p>At the end <strong>the binary is put</strong> into the folder <code>bin/</code> along the object files.</p>
+        <blockquote>
+            <p><strong><em>NOTE:</em></strong> The command <code>make</code> imply a <code>make clean</code></p>
+        </blockquote>
+        <h3 id="debug-mode">Debug Mode</h3>
+        <p>The program could be compiled in debug mode to have a more verbose output.</p>
+        <p>To compile in debug mode:</p>
+        <pre><code><span class="hljs-built_in">make</span> <span class="hljs-keyword">debug</span>
+</code></pre>
+        <h3 id="memory-check">Memory check</h3>
+        <p>The program have been analyzed with <code>valgrind</code> to detect memory leaks in both single process and
+            multi process modess.</p>
+        <pre><code>valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose ./bin/colonnade -f <span class="hljs-selector-tag">input</span><span class="hljs-selector-class">.lorem</span><span class="hljs-selector-class">.txt</span>
+</code></pre>
+        <h2 id="usage">Usage</h2>
+        <p>To manipulate a text file with <code>colonnade</code>:</p>
+        <pre><code>./bin/colonnade -f <span class="hljs-selector-tag">input</span>.txt
+</code></pre>
+        <p>The output is written to the output file <code>output.input.txt</code>.</p>
+        <blockquote>
+            <p><strong><em>NOTE:</em></strong> The parameter <code>-f</code> is the only one mandatory, others, are
+                described into the next section.</p>
+        </blockquote>
+        <h2 id="options">Options</h2>
+        <p>It&#39;s possible to specify various parameters about the the format of the text.</p>
+        <p>The options menu will appear if the program is executed with no parameters or if an unknown parameter is
+            passed.</p>
+        <p>The options menu:</p>
+        <pre><code>options [default <span class="hljs-built_in">value</span>]:
+        -f    indicates <span class="hljs-keyword">the</span> input <span class="hljs-built_in">file</span>
+        -c    [<span class="hljs-number">30</span>]  indicates <span class="hljs-keyword">the</span> width <span class="hljs-keyword">of</span> <span class="hljs-keyword">a</span> column <span class="hljs-keyword">in</span> <span class="hljs-keyword">chars</span>
+        -n    [<span class="hljs-number">2</span>]   indicates <span class="hljs-keyword">the</span> <span class="hljs-built_in">number</span> <span class="hljs-keyword">of</span> columns per page
+        -s    [<span class="hljs-number">2</span>]   indicates <span class="hljs-keyword">the</span> <span class="hljs-literal">space</span> between columns
+        -r    [<span class="hljs-number">40</span>]  indicates <span class="hljs-keyword">the</span> <span class="hljs-built_in">number</span> <span class="hljs-keyword">of</span> rows <span class="hljs-keyword">for</span> <span class="hljs-keyword">a</span> column/per page
+        -m    indicates <span class="hljs-keyword">the</span> use <span class="hljs-keyword">of</span> multi processing
+</code></pre>
+        <blockquote>
+            <p><strong><em>NOTE:</em></strong> Parameters with default value can be omitted</p>
+        </blockquote>
+        <h2 id="known-bugs-and-weird-things">Known bugs and weird things</h2>
+        <p>Some rare situation are not handled by the code, mainly there are two know.</p>
+        <p>A void line as first line in column, happens when the last row of a paragraph is the last row of the column.
+            e.g.</p>
+        <pre><code>    [+] Formatted text:
+
+    aaa  bbb  ccc ddd eee fff ggg    ooo  ppp  qqq rrr sss ttt uuu
+    hhh  iii  jjj kkk lll mmm nnn    vvv www xxx yyy zzz          
+    ooo  ppp  qqq rrr sss ttt uuu                                 
+    vvv www xxx yyy zzz             <span class="hljs-number"> 111 </span><span class="hljs-number"> 222 </span><span class="hljs-number"> 333 </span>444<span class="hljs-number"> 555 </span>666 777
+                                    <span class="hljs-number"> 888 </span>999<span class="hljs-number"> 000 </span>                 
+   <span class="hljs-number"> 111 </span><span class="hljs-number"> 222 </span><span class="hljs-number"> 333 </span>444<span class="hljs-number"> 555 </span>666<span class="hljs-number"> 777 </span>                                
+   <span class="hljs-number"> 888 </span>999<span class="hljs-number"> 000 </span>                     aaa  bbb  ccc ddd eee fff ggg
+                                     hhh  iii  jjj kkk lll mmm nnn
+    aaa  bbb  ccc ddd eee fff ggg    ooo  ppp  qqq rrr sss ttt uuu
+    hhh  iii  jjj kkk lll mmm nnn    vvv www xxx yyy zzz          
+
+    %%%
+
+--&gt;                                 <span class="hljs-number"> 888 </span>999<span class="hljs-number"> 000 </span>                 
+   <span class="hljs-number"> 111 </span><span class="hljs-number"> 222 </span><span class="hljs-number"> 333 </span>444<span class="hljs-number"> 555 </span>666<span class="hljs-number"> 777 </span>                                
+   <span class="hljs-number"> 888 </span>999<span class="hljs-number"> 000 </span>                     aaa  bbb  ccc ddd eee fff ggg
+                                     hhh  iii  jjj kkk lll mmm nnn
+    aaa  bbb  ccc ddd eee fff ggg    ooo  ppp  qqq rrr sss ttt uuu
+    hhh  iii  jjj kkk lll mmm nnn    vvv www xxx yyy zzz          
+    ooo  ppp  qqq rrr sss ttt uuu                                 
+    vvv www xxx yyy zzz             <span class="hljs-number"> 111 </span><span class="hljs-number"> 222 </span><span class="hljs-number"> 333 </span>444<span class="hljs-number"> 555 </span>666 777
+                                    <span class="hljs-number"> 888 </span>999<span class="hljs-number"> 000 </span>                 
+   <span class="hljs-number"> 111 </span><span class="hljs-number"> 222 </span><span class="hljs-number"> 333 </span>444<span class="hljs-number"> 555 </span>666 777
+</code></pre>
+        <p>The second weird thing makes the last row of the last paragraph to exceed the column maximum width. e.g.</p>
+        <pre><code>%%%
+
+aaaa  bbbb cccc    <span class="hljs-number">1111</span>  <span class="hljs-number">2222</span> <span class="hljs-number">3333</span>
+dddd  eeee ffff    <span class="hljs-number">4444</span>  <span class="hljs-number">5555</span> <span class="hljs-number">6666</span>
+gggg  hhhh iiii    <span class="hljs-number">7777</span>  <span class="hljs-number">8888</span> <span class="hljs-number">9999</span>
+jjjj  kkkk llll    <span class="hljs-number">0000</span>           
+mmmm  nnnn oooo                   
+pppp  qqqq rrrr    aaaa  bbbb cccc
+ssss  tttt uuuu    dddd  eeee ffff
+vvvv  wwww xxxx    gggg  hhhh iiii
+yyyy zzzz          jjjj  kkkk llll
+                   mmmm  nnnn oooo
+
+%%%
+
+pppp  qqqq rrrr                   
+ssss  tttt uuuu                   
+vvvv  wwww xxxx                   
+yyyy zzzz                         
+
+<span class="hljs-number">1111</span>  <span class="hljs-number">2222</span> <span class="hljs-number">3333</span>                   
+<span class="hljs-number">4444</span>  <span class="hljs-number">5555</span> <span class="hljs-number">6666</span>                   
+<span class="hljs-number">7777</span> <span class="hljs-number">8888</span> <span class="hljs-number">9999</span> <span class="hljs-number">0000</span>  &lt;--             
+
+[+] Output written to output.input.fuzz4.txt
+</code></pre>
+        <p>No more bugs were encountered during the testing.</p>
+        <h1 id="development">Development</h1>
+        <h2 id="about-the-code">About the code</h2>
+        <p>Code have been organized in multiple files:</p>
+        <ul>
+            <li>main.c</li>
+            <li>columns.c</li>
+            <li>process_single.c</li>
+            <li>process_multi.c</li>
+        </ul>
+        <p>For every <code>.c</code> file except for the <code>main.c</code> there is a corresponding <code>.h</code>
+            file containings the prototype for functions and the structs.</p>
+        <p>Macros have been used to make the code less verbose. e.g. check pointers, check semaphores status, ... All
+            macros are in <code>.h</code> files.</p>
+        <h3 id="memory-and-pointers">Memory and pointers</h3>
+        <p>All pointer passed as argument to a function are checked for a NULL value.</p>
+        <p>All dynamic memory is allocated using <code>calloc</code>, more confortable than <code>malloc</code> because
+            memory is automatically set to zero and a manual null byte after a string isn&#39;t required.</p>
+        <p>Pointers from <code>calloc</code> and <code>realloc</code> have not been checked intentionally, if a
+            <code>calloc</code> fails, there is a bigger problem, buy more ram on amazon.
+        </p>
+        <h3 id="programming-aids">Programming aids</h3>
+        <p>Chat-GPT was not used as aid to development, instead lot of time have been spent on:</p>
+        <ul>
+            <li><a href="https://man7.org/">https://man7.org/</a></li>
+            <li><a href="https://stackoverflow.com/">https://stackoverflow.com/</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Main_Page">https://en.wikipedia.org/wiki/Main_Page</a></li>
+            <li><a
+                    href="https://gustedt.gitlabpages.inria.fr/modern-c/">https://gustedt.gitlabpages.inria.fr/modern-c/</a>
+            </li>
+            <li><a href="https://github.com/s3b4stian/c-adventures">https://github.com/s3b4stian/c-adventures</a></li>
+            <li>Course lectures</li>
+            <li>Code snippets from the course</li>
+        </ul>
+        <h2 id="single-process-mode">Single Process Mode</h2>
+        <p>In this mode, all operations are executed sequentially, there are four main operations:</p>
+        <ul>
+            <li>file read and tokenization in an array of words</li>
+            <li>array of words organized in justified rows</li>
+            <li>justified rows to pages</li>
+            <li>pages to file</li>
+        </ul>
+        <h3 id="array-of-words">Array of Words</h3>
+        <p>The array of words is an array of pointers to <code>word</code> structure, heap allocated:</p>
+        <pre><code>|<span class="hljs-type">array_of_words</span>|
+
+<span class="hljs-type">[0</span>]-&gt;|<span class="hljs-type">word</span>|<span class="hljs-type">n</span>|
+<span class="hljs-type">[1</span>]-&gt;|<span class="hljs-type">word</span>|<span class="hljs-type">n</span>|
+<span class="hljs-type">[2</span>]-&gt;|<span class="hljs-type">word</span>|<span class="hljs-type">n</span>|
+<span class="hljs-type">[n</span>]-&gt;|<span class="hljs-type">word</span>|<span class="hljs-type">n</span>|<span class="hljs-type"></span>
+</code></pre>
+        <h3 id="justified-rows">Justified Rows</h3>
+        <p>Justified rows is an array of pointer to <code>rows</code> structure, heap allocated, every row is a linked
+            list of <code>word</code> structure:</p>
+        <pre><code>|<span class="hljs-string">array_of_rows</span>|
+
+[0]-&gt;|<span class="hljs-string">row</span>|<span class="hljs-string">f</span>|<span class="hljs-string">--&gt;</span>|<span class="hljs-string">word</span>|<span class="hljs-string">n</span>|<span class="hljs-string">--&gt;</span>|<span class="hljs-string">word</span>|<span class="hljs-string">n</span>|<span class="hljs-string">--&gt;</span>|<span class="hljs-string">word</span>|<span class="hljs-string">n</span>|<span class="hljs-string">--&gt; NULL
+[1]-&gt;</span>|<span class="hljs-string">row</span>|<span class="hljs-string">f</span>|<span class="hljs-string">--&gt;</span>|<span class="hljs-string">word</span>|<span class="hljs-string">n</span>|<span class="hljs-string">--&gt;</span>|<span class="hljs-string">word</span>|<span class="hljs-string">n</span>|<span class="hljs-string">--&gt; NULL
+[2]-&gt;</span>|<span class="hljs-string">row</span>|<span class="hljs-string">f</span>|<span class="hljs-string">--&gt;</span>|<span class="hljs-string">word</span>|<span class="hljs-string">n</span>|<span class="hljs-string">--&gt;</span>|<span class="hljs-string">word</span>|<span class="hljs-string">n</span>|<span class="hljs-string">--&gt;</span>|<span class="hljs-string">word</span>|<span class="hljs-string">n</span>|<span class="hljs-string">--&gt;</span>|<span class="hljs-string">word</span>|<span class="hljs-string">n</span>|<span class="hljs-string">--&gt;</span>|<span class="hljs-string">word</span>|<span class="hljs-string">n</span>|<span class="hljs-string">--&gt; NULL
+[n]-&gt;</span>|<span class="hljs-string">row</span>|<span class="hljs-string">f</span>|<span class="hljs-string">--&gt;</span>|<span class="hljs-string">word</span>|<span class="hljs-string">n</span>|<span class="hljs-string">--&gt;</span>|<span class="hljs-string">word</span>|<span class="hljs-string">n</span>|<span class="hljs-string">--&gt;</span>|<span class="hljs-string">word</span>|<span class="hljs-string">n</span>|<span class="hljs-string">--&gt;</span>|<span class="hljs-string">word</span>|<span class="hljs-string">n</span>|<span class="hljs-string">--&gt; NULL</span>
+</code></pre>
+        <p>In <code>row</code>, <code>f</code> is the pointer to the first <code>word</code>, every <code>word</code>
+            has a pointer to the next, the <code>row</code> ends when the pointer to the next is <code>NULL</code>.</p>
+        <p>To justify a row the program check the number of chars for every word, the spaces between words and the max
+            width of a column.</p>
+        <p>If the width (in chars) of a column is greather than the chars of all words plus spaces then program start to
+            loop the linked list, every time a <code>word</code> has the attribute space, an addition space is
+            concatenated to the <code>word</code>. When the width of the column is matched the loop stops.</p>
+        <p>Using a linked list to abstract a <code>row</code> is easier than work with a <code>row</code> as array of
+            char.</p>
+        <h3 id="to-pages">To Pages</h3>
+        <p>Every justified row is at this point written to a matrix that abstract the pages.</p>
+        <p>Writes are done following thi order:</p>
+        <pre><code><span class="hljs-literal">-</span><span class="hljs-literal">-</span>      <span class="hljs-literal">-</span><span class="hljs-literal">-</span>      <span class="hljs-literal">-</span><span class="hljs-literal">-</span>      <span class="hljs-literal">-</span><span class="hljs-literal">-</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span>      <span class="hljs-literal">-</span><span class="hljs-literal">-</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span>      <span class="hljs-literal">-</span><span class="hljs-literal">-</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span>
+    <span class="hljs-literal">-</span>&gt;  <span class="hljs-literal">-</span><span class="hljs-literal">-</span>  <span class="hljs-literal">-</span>&gt;  <span class="hljs-literal">-</span><span class="hljs-literal">-</span>  <span class="hljs-literal">-</span>&gt;  <span class="hljs-literal">-</span><span class="hljs-literal">-</span>     <span class="hljs-literal">-</span>&gt;  <span class="hljs-literal">-</span><span class="hljs-literal">-</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span>  <span class="hljs-literal">-</span>&gt;  <span class="hljs-literal">-</span><span class="hljs-literal">-</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span>
+                <span class="hljs-literal">-</span><span class="hljs-literal">-</span>      <span class="hljs-literal">-</span><span class="hljs-literal">-</span>         <span class="hljs-literal">-</span><span class="hljs-literal">-</span>         <span class="hljs-literal">-</span><span class="hljs-literal">-</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span>
+</code></pre>
+        <p>When a page is full, avery page has a maximun number of rows corresponding at the maximun height of a column,
+            the program insert the page separator and restart.</p>
+        <pre><code><span class="hljs-literal">-</span><span class="hljs-literal">-</span>      <span class="hljs-literal">-</span><span class="hljs-literal">-</span>      <span class="hljs-literal">-</span><span class="hljs-literal">-</span>      <span class="hljs-literal">-</span><span class="hljs-literal">-</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span>      <span class="hljs-literal">-</span><span class="hljs-literal">-</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span>      <span class="hljs-literal">-</span><span class="hljs-literal">-</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span>      <span class="hljs-literal">-</span><span class="hljs-literal">-</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span>      <span class="hljs-literal">-</span><span class="hljs-literal">-</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span>      <span class="hljs-literal">-</span><span class="hljs-literal">-</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span>      <span class="hljs-literal">-</span><span class="hljs-literal">-</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span>
+        <span class="hljs-literal">-</span><span class="hljs-literal">-</span>      <span class="hljs-literal">-</span><span class="hljs-literal">-</span>      <span class="hljs-literal">-</span><span class="hljs-literal">-</span>         <span class="hljs-literal">-</span><span class="hljs-literal">-</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span>      <span class="hljs-literal">-</span><span class="hljs-literal">-</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span>      <span class="hljs-literal">-</span><span class="hljs-literal">-</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span>      <span class="hljs-literal">-</span><span class="hljs-literal">-</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span>      <span class="hljs-literal">-</span><span class="hljs-literal">-</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span>      <span class="hljs-literal">-</span><span class="hljs-literal">-</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span>
+    <span class="hljs-literal">-</span>&gt;      <span class="hljs-literal">-</span>&gt;  <span class="hljs-literal">-</span><span class="hljs-literal">-</span>  <span class="hljs-literal">-</span>&gt;  <span class="hljs-literal">-</span><span class="hljs-literal">-</span>     <span class="hljs-literal">-</span>&gt;  <span class="hljs-literal">-</span><span class="hljs-literal">-</span>     <span class="hljs-literal">-</span>&gt;  <span class="hljs-literal">-</span><span class="hljs-literal">-</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span>  <span class="hljs-literal">-</span>&gt;  <span class="hljs-literal">-</span><span class="hljs-literal">-</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span>  <span class="hljs-literal">-</span>&gt;  <span class="hljs-literal">-</span><span class="hljs-literal">-</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span>  <span class="hljs-literal">-</span>&gt;  <span class="hljs-literal">-</span><span class="hljs-literal">-</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span>  <span class="hljs-literal">-</span>&gt;  <span class="hljs-literal">-</span><span class="hljs-literal">-</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span>
+                                                         <span class="hljs-comment">%%</span>         <span class="hljs-comment">%%</span>         <span class="hljs-comment">%%</span>         <span class="hljs-comment">%%</span>
+                                                                    <span class="hljs-literal">-</span><span class="hljs-literal">-</span>         <span class="hljs-literal">-</span><span class="hljs-literal">-</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span>      <span class="hljs-literal">-</span><span class="hljs-literal">-</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span>
+                                                                                          <span class="hljs-literal">-</span><span class="hljs-literal">-</span>
+</code></pre>
+        <h3 id="pages-to-file">Pages to file</h3>
+        <p>Once the page matrix is compled is written to a file row by row, the name of the output file is made
+            prependig thw word <code>output.</code> to the original file name. e.g. the file <code>lorem.txt</code>
+            become <code>output.lorem.txt</code>.</p>
+        <h2 id="multi-process">Multi process</h2>
+        <p>Multi process development brings with it new problems than single process programming, you need a way for
+            process to communicate and to syncronize them.</p>
+        <p>As architecture the multiprocessing part is the porting of the actions seen before in single process mode.
+        </p>
+        <p>Actions by processes:</p>
+        <ul>
+            <li>Main process</li>
+            <li>Read file and array of words creation [aka P1]</li>
+            <li>Creation of justified rows array [aka P2]</li>
+            <li>Justified rows to pages [aka P3]</li>
+            <li>Pages to file [aka P4]</li>
+        </ul>
+        <p>Communication between processes is done using shared memory and semaphores are used to avoid race conditions.
+            Have been allocated the least quantity of shared memory as possible.</p>
+        <h3 id="why-semaphores-and-shared-memory">Why semaphores and shared memory</h3>
+        <p>There are lot of ways to achieve the comunication between processes</p>
+        <ul>
+            <li>shared files</li>
+            <li>shared memory</li>
+            <li>pipes</li>
+            <li>name pipes</li>
+            <li>message queues</li>
+            <li>sockets</li>
+            <li>signals</li>
+        </ul>
+        <p>In the first module of the course a part of the program was dedicated to semaphores as method to synchronize
+            two or more processes. I was interested in learning more about semaphores.</p>
+        <p>Shared memory because no other metod I think fit with semaphores.</p>
+        <h3 id="array-of-words-to-array-of-rows">Array of words to array of rows</h3>
+        <p>Trasfering data between P1 and P2 processes:</p>
+        <ul>
+            <li>P1 write to shared memory the number of allocated words (<code>struct</code>) and the size of every word
+            </li>
+            <li>P2 read from shared memory</li>
+            <li>P1 loop<ul>
+                    <li>write to shared memory a <code>word</code></li>
+                </ul>
+            </li>
+            <li>P2 loop<ul>
+                    <li>read from shared memory a <code>word</code></li>
+                </ul>
+            </li>
+        </ul>
+        <p>P2 use the data received from P1 to create an array of justified rows then transfers to P3 every justified
+            row created. </p>
+        <h3 id="array-of-rows-to-pages">Array of rows to pages</h3>
+        <p>Trasnfering data between P2 and P3 processes:</p>
+        <ul>
+            <li>P2 write to shared memory the number of rows written</li>
+            <li>P3 read from shared memory</li>
+            <li>P2 loop<ul>
+                    <li>write to shared memory the number of words in a <code>row</code></li>
+                    <li>write to shared memory the words from the row, one by one</li>
+                </ul>
+            </li>
+            <li>P3 loop<ul>
+                    <li>read from shared memory the number of words</li>
+                    <li>read from shared memory the words, one by one</li>
+                </ul>
+            </li>
+        </ul>
+        <p>P3 use the data received from P2 to populate a matrix an create a multicolumn page then tranfers to P4 every
+            row of the matrix.</p>
+        <h3 id="pages-to-final-file">Pages to final file</h3>
+        <p>Trasfering data between P3 and P4:</p>
+        <ul>
+            <li>P3 write to shared memory the number of rows written into the matrix</li>
+            <li>P4 read from shared memory</li>
+            <li>P3 loop<ul>
+                    <li>write to shared memory a row of the matrix</li>
+                </ul>
+            </li>
+            <li>P4 loop<ul>
+                    <li>read from shared memory</li>
+                </ul>
+            </li>
+        </ul>
+        <p>In every read/write a semaphore put in wait status the other process involved into the operation.</p>
+
+    </div>
+</body>
+
+</html>

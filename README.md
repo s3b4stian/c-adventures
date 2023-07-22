@@ -12,3 +12,6 @@ It contains some snippets from Udemy course [Mastering Data Structures & Algorit
 
 ## Strings
 C strings for humans, a little library to interact with C null terminated strings.
+
+## Uni
+C code written during my computer science studies at Sapienza University of Rome
